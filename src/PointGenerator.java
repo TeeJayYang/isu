@@ -1,23 +1,27 @@
 public abstract class PointGenerator{
-    private static int quantity, cost;
-    private static double rate;
-    public static void setQuantity(int q){
+    protected int quantity = 0, cost;
+    protected double rate;
+    public final void setQuantity(int q){
         quantity = q;
     }
-    public static double getRate(){
+    public final double getRate(){
         return rate;
     }
-    public static int getQuantity(){
+    public final int getQuantity(){
         return quantity;
     }
-    public static int getCost(){
+    public final int getCost(){
         return cost;
     }
-    public abstract void powerUp();
-    public static void upQuantity(){
+    
+    public final void upQuantity(){
         quantity++;
     }
-    public static void upCost(){
-        cost *= 2;
+    public final void upCost(){
+        cost *= 1.2;
+    }
+    public String toString(){
+        return "Cost: " + cost;
     } 
+    public abstract void powerUp();
 }

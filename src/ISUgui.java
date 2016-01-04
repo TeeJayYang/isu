@@ -1,11 +1,10 @@
-//TO DO: CHANGE SCOPE OF THE VARIABLES OF POINTGENERATOR
 import java.util.Timer;
 
 public class ISUgui extends javax.swing.JFrame {
     Game g;
-    ManualIncrease m;
     Timer t;
     Updater u;
+    PointGenerator pN1,pN2,pN3;
         public ISUgui() {
             initComponents();
             initObjects();
@@ -14,14 +13,16 @@ public class ISUgui extends javax.swing.JFrame {
     private void initObjects(){
         //the game engine itself
         g = new Game();
-        //manual button increase object
-        m = new ManualIncrease();
         //for scheduled increments
         t = new Timer();
         //the increment itself
         u = new Updater();
         //connecting the task to the timer
-        t.schedule(u, 0, 500 );
+        t.schedule(u, 0, 500);
+        //first point generator
+        pN1 = new PGnormal(10, 1);
+        pN2 = new PGnormal(300, 10);
+        pN3 = new PGnormal(10000, 100);
     }
     /**
      * This method is called from within the constructor to initialize the form.
@@ -36,8 +37,15 @@ public class ISUgui extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         txtres = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
-        btnbuy1 = new javax.swing.JButton();
-        jTextField1 = new javax.swing.JTextField();
+        btnbuyG1 = new javax.swing.JButton();
+        txtcostG1 = new javax.swing.JTextField();
+        jLabel3 = new javax.swing.JLabel();
+        btnbuyG2 = new javax.swing.JButton();
+        txtcostG2 = new javax.swing.JTextField();
+        jLabel4 = new javax.swing.JLabel();
+        btnbuyG3 = new javax.swing.JButton();
+        txtcostG3 = new javax.swing.JTextField();
+        btndouble = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -54,15 +62,61 @@ public class ISUgui extends javax.swing.JFrame {
 
         jLabel2.setText("Resource Generator #1 (+1/s)");
 
-        btnbuy1.setText("Buy");
-        btnbuy1.addActionListener(new java.awt.event.ActionListener() {
+        btnbuyG1.setText("Buy");
+        btnbuyG1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnbuy1ActionPerformed(evt);
+                btnbuyG1ActionPerformed(evt);
             }
         });
 
-        jTextField1.setEditable(false);
-        jTextField1.setText("Cost: 10");
+        txtcostG1.setEditable(false);
+        txtcostG1.setText("Initial Cost: 10");
+        txtcostG1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtcostG1ActionPerformed(evt);
+            }
+        });
+
+        jLabel3.setText("Resource Generator #2 (+10/s)");
+
+        btnbuyG2.setText("Buy");
+        btnbuyG2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnbuyG2ActionPerformed(evt);
+            }
+        });
+
+        txtcostG2.setEditable(false);
+        txtcostG2.setText("Initial Cost: 300");
+        txtcostG2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtcostG2ActionPerformed(evt);
+            }
+        });
+
+        jLabel4.setText("Resource Generator #3 (+100/s)");
+
+        btnbuyG3.setText("Buy");
+        btnbuyG3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnbuyG3ActionPerformed(evt);
+            }
+        });
+
+        txtcostG3.setEditable(false);
+        txtcostG3.setText("Initial Cost: 1200");
+        txtcostG3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtcostG3ActionPerformed(evt);
+            }
+        });
+
+        btndouble.setText("Double Click Power");
+        btndouble.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btndoubleActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -71,19 +125,37 @@ public class ISUgui extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnIncrease)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(btnIncrease)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btndouble)
+                        .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel1)
-                            .addComponent(btnbuy1))
+                            .addComponent(btnbuyG1))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jLabel2)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(txtres, javax.swing.GroupLayout.PREFERRED_SIZE, 191, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(120, Short.MAX_VALUE))
+                                .addComponent(txtcostG1))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(txtres, javax.swing.GroupLayout.PREFERRED_SIZE, 191, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 0, Short.MAX_VALUE))))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(btnbuyG2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jLabel3)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txtcostG2, javax.swing.GroupLayout.DEFAULT_SIZE, 161, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(btnbuyG3)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jLabel4)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txtcostG3, javax.swing.GroupLayout.DEFAULT_SIZE, 155, Short.MAX_VALUE)))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -93,13 +165,25 @@ public class ISUgui extends javax.swing.JFrame {
                     .addComponent(jLabel1)
                     .addComponent(txtres, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnIncrease)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnIncrease)
+                    .addComponent(btndouble))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
-                    .addComponent(btnbuy1)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(211, Short.MAX_VALUE))
+                    .addComponent(btnbuyG1)
+                    .addComponent(txtcostG1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel3)
+                    .addComponent(btnbuyG2)
+                    .addComponent(txtcostG2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel4)
+                    .addComponent(btnbuyG3)
+                    .addComponent(txtcostG3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(153, Short.MAX_VALUE))
         );
 
         pack();
@@ -112,9 +196,36 @@ public class ISUgui extends javax.swing.JFrame {
         txtres.setText(g.ToString());
     }//GEN-LAST:event_btnIncreaseActionPerformed
 
-    private void btnbuy1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnbuy1ActionPerformed
-        
-    }//GEN-LAST:event_btnbuy1ActionPerformed
+    private void btnbuyG1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnbuyG1ActionPerformed
+        pN1.upCost();
+        pN1.upQuantity();
+        txtcostG1.setText(pN1.toString());
+    }//GEN-LAST:event_btnbuyG1ActionPerformed
+
+    private void txtcostG1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtcostG1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtcostG1ActionPerformed
+
+    private void btnbuyG2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnbuyG2ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnbuyG2ActionPerformed
+
+    private void txtcostG2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtcostG2ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtcostG2ActionPerformed
+
+    private void btnbuyG3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnbuyG3ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnbuyG3ActionPerformed
+
+    private void txtcostG3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtcostG3ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtcostG3ActionPerformed
+
+    private void btndoubleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btndoubleActionPerformed
+        ManualIncrease.doubleIncrement();
+        btnIncrease.setText("+" + ManualIncrease.incrementAmount);
+    }//GEN-LAST:event_btndoubleActionPerformed
 
     /**
      * @param args the command line arguments
@@ -153,10 +264,17 @@ public class ISUgui extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnIncrease;
-    private javax.swing.JButton btnbuy1;
+    private javax.swing.JButton btnbuyG1;
+    private javax.swing.JButton btnbuyG2;
+    private javax.swing.JButton btnbuyG3;
+    private javax.swing.JButton btndouble;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JTextField jTextField1;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JTextField txtcostG1;
+    private javax.swing.JTextField txtcostG2;
+    private javax.swing.JTextField txtcostG3;
     private javax.swing.JTextField txtres;
     // End of variables declaration//GEN-END:variables
 }
