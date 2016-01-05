@@ -46,6 +46,7 @@ public class ISUgui extends javax.swing.JFrame {
         btndouble = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Generic Idle Game");
 
         btnIncrease.setText("+1");
         btnIncrease.addActionListener(new java.awt.event.ActionListener() {
