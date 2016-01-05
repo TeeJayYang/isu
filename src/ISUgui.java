@@ -1,28 +1,26 @@
 import java.util.Timer;
-
 public class ISUgui extends javax.swing.JFrame {
-    Game g;
     Timer t;
     Updater u;
-    PointGenerator pN1,pN2,pN3;
+    static PointGenerator pN1,pN2,pN3;
         public ISUgui() {
             initComponents();
             initObjects();
-            txtres.setText(g.ToString());
+            txtres.setText(Game.ToString());
+            
     }
     private void initObjects(){
-        //the game engine itself
-        g = new Game();
         //for scheduled increments
         t = new Timer();
         //the increment itself
         u = new Updater();
         //connecting the task to the timer
-        t.schedule(u, 0, 500);
+        t.schedule(u, 0, 1000);
         //first point generator
         pN1 = new PGnormal(10, 1);
         pN2 = new PGnormal(300, 10);
-        pN3 = new PGnormal(10000, 100);
+        pN3 = new PGnormal(1200, 100);
+        
     }
     /**
      * This method is called from within the constructor to initialize the form.
@@ -126,35 +124,35 @@ public class ISUgui extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(btnIncrease)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btndouble)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(btnIncrease)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(btndouble))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel1)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(txtres, javax.swing.GroupLayout.PREFERRED_SIZE, 191, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(btnbuyG2)
+                                    .addComponent(btnbuyG3))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                        .addComponent(jLabel3)
+                                        .addGap(6, 6, 6))
+                                    .addComponent(jLabel4))))
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel1)
-                            .addComponent(btnbuyG1))
+                        .addComponent(btnbuyG1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel2)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(txtcostG1))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(txtres, javax.swing.GroupLayout.PREFERRED_SIZE, 191, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(0, 0, Short.MAX_VALUE))))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(btnbuyG2)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jLabel3)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txtcostG2, javax.swing.GroupLayout.DEFAULT_SIZE, 161, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(btnbuyG3)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jLabel4)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txtcostG3, javax.swing.GroupLayout.DEFAULT_SIZE, 155, Short.MAX_VALUE)))
+                        .addComponent(jLabel2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 26, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(txtcostG2, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(txtcostG3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 341, Short.MAX_VALUE)
+                            .addComponent(txtcostG1))))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -192,14 +190,19 @@ public class ISUgui extends javax.swing.JFrame {
     private void btnIncreaseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIncreaseActionPerformed
         //Manually click the button -> increase the resources by the amount
         //of the manual increase
-        g.increaseResources(ManualIncrease.incrementAmount);
-        txtres.setText(g.ToString());
+        Game.increaseResources(ManualIncrease.incrementAmount);
+        txtres.setText(Game.ToString());
+        checkButtons();
     }//GEN-LAST:event_btnIncreaseActionPerformed
 
     private void btnbuyG1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnbuyG1ActionPerformed
-        pN1.upCost();
         pN1.upQuantity();
+        AutoIncrease.increase(1);
+        Game.decreaseResources(pN1.getCost());
+        txtres.setText(Game.ToString());
+        pN1.upCost();
         txtcostG1.setText(pN1.toString());
+        checkButtons();
     }//GEN-LAST:event_btnbuyG1ActionPerformed
 
     private void txtcostG1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtcostG1ActionPerformed
@@ -207,7 +210,13 @@ public class ISUgui extends javax.swing.JFrame {
     }//GEN-LAST:event_txtcostG1ActionPerformed
 
     private void btnbuyG2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnbuyG2ActionPerformed
-        // TODO add your handling code here:
+        pN2.upQuantity();
+        AutoIncrease.increase(2);
+        Game.decreaseResources(pN2.getCost());
+        txtres.setText(Game.ToString());
+        pN2.upCost();
+        txtcostG2.setText(pN2.toString());
+        checkButtons();
     }//GEN-LAST:event_btnbuyG2ActionPerformed
 
     private void txtcostG2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtcostG2ActionPerformed
@@ -215,7 +224,13 @@ public class ISUgui extends javax.swing.JFrame {
     }//GEN-LAST:event_txtcostG2ActionPerformed
 
     private void btnbuyG3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnbuyG3ActionPerformed
-        // TODO add your handling code here:
+        pN3.upQuantity();
+        AutoIncrease.increase(3);
+        Game.decreaseResources(pN3.getCost());
+        txtres.setText(Game.ToString());
+        pN3.upCost();
+        txtcostG3.setText(pN3.toString());
+        checkButtons();
     }//GEN-LAST:event_btnbuyG3ActionPerformed
 
     private void txtcostG3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtcostG3ActionPerformed
@@ -226,10 +241,24 @@ public class ISUgui extends javax.swing.JFrame {
         ManualIncrease.doubleIncrement();
         btnIncrease.setText("+" + ManualIncrease.incrementAmount);
     }//GEN-LAST:event_btndoubleActionPerformed
-
+    public static void updateCall(int increase){
+        Game.increaseResources(increase);
+        txtres.setText(Game.ToString());
+        checkButtons();
+    }
+    private static void checkButtons (){
+        if (Game.getRes() >= pN1.getCost()) btnbuyG1.setEnabled (true);
+        else btnbuyG1.setEnabled (false);
+        if (Game.getRes() >= pN2.getCost()) btnbuyG2.setEnabled (true);
+        else btnbuyG2.setEnabled (false);
+        if (Game.getRes() >= pN3.getCost()) btnbuyG3.setEnabled (true);
+        else btnbuyG3.setEnabled (false);
+    }
     /**
      * @param args the command line arguments
      */
+    
+    
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -260,8 +289,21 @@ public class ISUgui extends javax.swing.JFrame {
                 new ISUgui().setVisible(true);
             }
         });
-    }
-
+    }                  
+    private javax.swing.JButton btnIncrease;
+    private static javax.swing.JButton btnbuyG1;
+    private static javax.swing.JButton btnbuyG2;
+    private static javax.swing.JButton btnbuyG3;
+    private static javax.swing.JButton btndouble;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JTextField txtcostG1;
+    private javax.swing.JTextField txtcostG2;
+    private javax.swing.JTextField txtcostG3;
+    private static javax.swing.JTextField txtres;
+/*
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnIncrease;
     private javax.swing.JButton btnbuyG1;
@@ -277,4 +319,5 @@ public class ISUgui extends javax.swing.JFrame {
     private javax.swing.JTextField txtcostG3;
     private javax.swing.JTextField txtres;
     // End of variables declaration//GEN-END:variables
+    */
 }

@@ -1,20 +1,17 @@
 
 public class Game {
-    private int resources;
-    
-    public Game(){
-        resources = 0;
-    }
-    public int getRes(){
+    private static int resources = 0;
+
+    public static int getRes(){
         return resources;
     }
-    public void increaseResources(int inc){
+    public static void increaseResources(int inc){
         resources += inc;
     }
-    public void decreaseResources(int dec){
+    public static void decreaseResources(int dec){
          resources -= dec;
     }
-    public String ToString(){
+    public static String ToString(){
         return String.valueOf(resources);
     }
 }
