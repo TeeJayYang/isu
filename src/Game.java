@@ -1,6 +1,6 @@
 
 public class Game {
-    private static int resources = 0;
+    static int resources = 0;
 
     public static int getRes(){
         return resources;

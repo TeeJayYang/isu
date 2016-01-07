@@ -1,13 +1,16 @@
+import java.util.ArrayList;
 import java.util.Timer;
+import javax.swing.DefaultListModel;
 public class ISUgui extends javax.swing.JFrame {
     Timer t;
     Updater u;
-    static PointGenerator pN1,pN2,pN3;
+    DefaultListModel model= new DefaultListModel();
+    static ArrayList<PGnormal> generatorList = new ArrayList();
         public ISUgui() {
             initComponents();
             initObjects();
             txtres.setText(Game.ToString());
-            
+            btnbuy.setEnabled(false);
     }
     private void initObjects(){
         //for scheduled increments
@@ -17,10 +20,13 @@ public class ISUgui extends javax.swing.JFrame {
         //connecting the task to the timer
         t.schedule(u, 0, 1000);
         //first point generator
-        pN1 = new PGnormal(10, 1);
-        pN2 = new PGnormal(300, 10);
-        pN3 = new PGnormal(1200, 100);
-        
+        generatorList.add(new PGnormal(10, 1, "Resource Generator 1"));
+        model.addElement(generatorList.get(0).getName());
+        generatorList.add(new PGnormal(300, 10, "Resource Generator 2"));
+        model.addElement(generatorList.get(1).getName());
+        generatorList.add(new PGnormal(1200, 100, "Resource Generator 3"));
+        model.addElement(generatorList.get(2).getName());
+        lstresources.setModel(model);
     }
     /**
      * This method is called from within the constructor to initialize the form.
@@ -34,19 +40,21 @@ public class ISUgui extends javax.swing.JFrame {
         btnIncrease = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         txtres = new javax.swing.JTextField();
-        jLabel2 = new javax.swing.JLabel();
-        btnbuyG1 = new javax.swing.JButton();
-        txtcostG1 = new javax.swing.JTextField();
-        jLabel3 = new javax.swing.JLabel();
-        btnbuyG2 = new javax.swing.JButton();
-        txtcostG2 = new javax.swing.JTextField();
-        jLabel4 = new javax.swing.JLabel();
-        btnbuyG3 = new javax.swing.JButton();
-        txtcostG3 = new javax.swing.JTextField();
         btndouble = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        lstresources = new javax.swing.JList();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        txtinfo = new javax.swing.JTextArea();
+        btnbuy = new javax.swing.JButton();
+        labelincrease = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Generic Idle Game");
+        setBackground(new java.awt.Color(0, 51, 255));
+        setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        setForeground(java.awt.Color.magenta);
 
         btnIncrease.setText("+1");
         btnIncrease.addActionListener(new java.awt.event.ActionListener() {
@@ -59,63 +67,40 @@ public class ISUgui extends javax.swing.JFrame {
 
         txtres.setEditable(false);
 
-        jLabel2.setText("Resource Generator #1 (+1/s)");
-
-        btnbuyG1.setText("Buy");
-        btnbuyG1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnbuyG1ActionPerformed(evt);
-            }
-        });
-
-        txtcostG1.setEditable(false);
-        txtcostG1.setText("Initial Cost: 10");
-        txtcostG1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtcostG1ActionPerformed(evt);
-            }
-        });
-
-        jLabel3.setText("Resource Generator #2 (+10/s)");
-
-        btnbuyG2.setText("Buy");
-        btnbuyG2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnbuyG2ActionPerformed(evt);
-            }
-        });
-
-        txtcostG2.setEditable(false);
-        txtcostG2.setText("Initial Cost: 300");
-        txtcostG2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtcostG2ActionPerformed(evt);
-            }
-        });
-
-        jLabel4.setText("Resource Generator #3 (+100/s)");
-
-        btnbuyG3.setText("Buy");
-        btnbuyG3.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnbuyG3ActionPerformed(evt);
-            }
-        });
-
-        txtcostG3.setEditable(false);
-        txtcostG3.setText("Initial Cost: 1200");
-        txtcostG3.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtcostG3ActionPerformed(evt);
-            }
-        });
-
         btndouble.setText("Double Click Power");
         btndouble.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btndoubleActionPerformed(evt);
             }
         });
+
+        lstresources.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lstresourcesMouseClicked(evt);
+            }
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                lstresourcesMouseReleased(evt);
+            }
+        });
+        jScrollPane1.setViewportView(lstresources);
+
+        txtinfo.setEditable(false);
+        txtinfo.setColumns(20);
+        txtinfo.setRows(5);
+        jScrollPane2.setViewportView(txtinfo);
+
+        btnbuy.setText("Buy");
+        btnbuy.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnbuyActionPerformed(evt);
+            }
+        });
+
+        labelincrease.setText("Idle Increase: 0/s");
+
+        jLabel2.setText("Resource Generator List");
+
+        jLabel3.setText("Info");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -125,6 +110,10 @@ public class ISUgui extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 173, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 246, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(btnIncrease)
@@ -133,27 +122,15 @@ public class ISUgui extends javax.swing.JFrame {
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jLabel1)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(txtres, javax.swing.GroupLayout.PREFERRED_SIZE, 191, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(btnbuyG2)
-                                    .addComponent(btnbuyG3))
+                                .addComponent(txtres, javax.swing.GroupLayout.PREFERRED_SIZE, 191, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                        .addComponent(jLabel3)
-                                        .addGap(6, 6, 6))
-                                    .addComponent(jLabel4))))
+                                .addComponent(labelincrease))
+                            .addComponent(btnbuy))
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(btnbuyG1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jLabel2)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 26, Short.MAX_VALUE)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(txtcostG2, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(txtcostG3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 341, Short.MAX_VALUE)
-                            .addComponent(txtcostG1))))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jLabel3)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -162,27 +139,23 @@ public class ISUgui extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
-                    .addComponent(txtres, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtres, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(labelincrease))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnIncrease)
                     .addComponent(btndouble))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGap(14, 14, 14)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jLabel2)
-                    .addComponent(btnbuyG1)
-                    .addComponent(txtcostG1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jLabel3))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel3)
-                    .addComponent(btnbuyG2)
-                    .addComponent(txtcostG2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 156, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 156, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel4)
-                    .addComponent(btnbuyG3)
-                    .addComponent(txtcostG3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(153, Short.MAX_VALUE))
+                .addComponent(btnbuy)
+                .addContainerGap(114, Short.MAX_VALUE))
         );
 
         pack();
@@ -196,64 +169,44 @@ public class ISUgui extends javax.swing.JFrame {
         checkButtons();
     }//GEN-LAST:event_btnIncreaseActionPerformed
 
-    private void btnbuyG1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnbuyG1ActionPerformed
-        pN1.upQuantity();
-        AutoIncrease.increase(1);
-        Game.decreaseResources(pN1.getCost());
-        txtres.setText(Game.ToString());
-        pN1.upCost();
-        txtcostG1.setText(pN1.toString());
-        checkButtons();
-    }//GEN-LAST:event_btnbuyG1ActionPerformed
-
-    private void txtcostG1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtcostG1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtcostG1ActionPerformed
-
-    private void btnbuyG2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnbuyG2ActionPerformed
-        pN2.upQuantity();
-        AutoIncrease.increase(2);
-        Game.decreaseResources(pN2.getCost());
-        txtres.setText(Game.ToString());
-        pN2.upCost();
-        txtcostG2.setText(pN2.toString());
-        checkButtons();
-    }//GEN-LAST:event_btnbuyG2ActionPerformed
-
-    private void txtcostG2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtcostG2ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtcostG2ActionPerformed
-
-    private void btnbuyG3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnbuyG3ActionPerformed
-        pN3.upQuantity();
-        AutoIncrease.increase(3);
-        Game.decreaseResources(pN3.getCost());
-        txtres.setText(Game.ToString());
-        pN3.upCost();
-        txtcostG3.setText(pN3.toString());
-        checkButtons();
-    }//GEN-LAST:event_btnbuyG3ActionPerformed
-
-    private void txtcostG3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtcostG3ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtcostG3ActionPerformed
-
     private void btndoubleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btndoubleActionPerformed
         ManualIncrease.doubleIncrement();
         btnIncrease.setText("+" + ManualIncrease.incrementAmount);
     }//GEN-LAST:event_btndoubleActionPerformed
+
+    private void lstresourcesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lstresourcesMouseClicked
+    }//GEN-LAST:event_lstresourcesMouseClicked
+
+    private void lstresourcesMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lstresourcesMouseReleased
+        int item = lstresources.getSelectedIndex();
+        txtinfo.setText(generatorList.get(item).toString());
+        checkButtons();
+    }//GEN-LAST:event_lstresourcesMouseReleased
+
+    private void btnbuyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnbuyActionPerformed
+        int item = lstresources.getSelectedIndex();
+        int cost = generatorList.get(item).getCost();
+        Game.decreaseResources(cost);
+        txtres.setText(String.valueOf(Game.resources));
+        generatorList.get(item).upQuantity();
+        generatorList.get(item).upCost();
+        txtinfo.setText(generatorList.get(item).toString());
+        AutoIncrease.increase(item+1);
+        checkButtons();
+    }//GEN-LAST:event_btnbuyActionPerformed
     public static void updateCall(int increase){
         Game.increaseResources(increase);
+        labelincrease.setText("Idle Increase: " + increase + "/s");
         txtres.setText(Game.ToString());
         checkButtons();
     }
     private static void checkButtons (){
-        if (Game.getRes() >= pN1.getCost()) btnbuyG1.setEnabled (true);
-        else btnbuyG1.setEnabled (false);
-        if (Game.getRes() >= pN2.getCost()) btnbuyG2.setEnabled (true);
-        else btnbuyG2.setEnabled (false);
-        if (Game.getRes() >= pN3.getCost()) btnbuyG3.setEnabled (true);
-        else btnbuyG3.setEnabled (false);
+        if (!lstresources.isSelectionEmpty()){
+            int item = lstresources.getSelectedIndex();
+            if (Game.getRes() >= generatorList.get(item).getCost()) btnbuy.setEnabled (true);
+            else btnbuy.setEnabled(false);
+        }
+        else btnbuy.setEnabled(false);
     }
     /**
      * @param args the command line arguments
@@ -290,34 +243,36 @@ public class ISUgui extends javax.swing.JFrame {
                 new ISUgui().setVisible(true);
             }
         });
-    }                  
+    }  
+    
+    //custom variable declaration
+    //this is because some elements are 
+    //required to be static
     private javax.swing.JButton btnIncrease;
-    private static javax.swing.JButton btnbuyG1;
-    private static javax.swing.JButton btnbuyG2;
-    private static javax.swing.JButton btnbuyG3;
+    private static javax.swing.JButton btnbuy;
     private static javax.swing.JButton btndouble;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JTextField txtcostG1;
-    private javax.swing.JTextField txtcostG2;
-    private javax.swing.JTextField txtcostG3;
     private static javax.swing.JTextField txtres;
+    private static javax.swing.JList lstresources;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private static javax.swing.JTextArea txtinfo;
+    private static javax.swing.JLabel labelincrease;
 /*
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnIncrease;
-    private javax.swing.JButton btnbuyG1;
-    private javax.swing.JButton btnbuyG2;
-    private javax.swing.JButton btnbuyG3;
+    private javax.swing.JButton btnbuy;
     private javax.swing.JButton btndouble;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JTextField txtcostG1;
-    private javax.swing.JTextField txtcostG2;
-    private javax.swing.JTextField txtcostG3;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JLabel labelincrease;
+    private javax.swing.JList lstresources;
+    private javax.swing.JTextArea txtinfo;
     private javax.swing.JTextField txtres;
     // End of variables declaration//GEN-END:variables
     */

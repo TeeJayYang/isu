@@ -1,13 +1,14 @@
 
 public class PGnormal extends PointGenerator{
-    public PGnormal(int c, int r){
+    public PGnormal(int c, int r, String n){
         cost = c;
         rate = r;
+        name = n;
     }
     public void powerUp() {
-        System.out.print("This is the first PG");
+        System.out.print("WORK IN PROGRESS");
     }
     public String toString(){
-        return super.toString() + " (Normal Type)";
+        return super.toString() + "Type: Normal\n";
     } 
 }
