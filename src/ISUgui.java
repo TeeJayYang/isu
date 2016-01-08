@@ -6,7 +6,7 @@ public class ISUgui extends javax.swing.JFrame {
     Timer t;
     Updater u;
     DefaultListModel model= new DefaultListModel();
-    static ArrayList<PGnormal> generatorList = new ArrayList();
+    static ArrayList generatorList = new ArrayList();
         public ISUgui() {
             initComponents();
             initObjects();
@@ -23,11 +23,11 @@ public class ISUgui extends javax.swing.JFrame {
         t.schedule(u, 0, 1000);
         //first point generator
         generatorList.add(new PGnormal(10, 1, "Miner"));
-        model.addElement(generatorList.get(0).getName());
+        model.addElement(((PGnormal)generatorList.get(0)).getName());
         generatorList.add(new PGnormal(300, 10, "Auto Drill"));
-        model.addElement(generatorList.get(1).getName());
+        model.addElement(((PGnormal)generatorList.get(1)).getName());
         generatorList.add(new PGnormal(1200, 100, "Mining Robot"));
-        model.addElement(generatorList.get(2).getName());
+        model.addElement(((PGnormal)generatorList.get(0)).getName());
         lstresources.setModel(model);
     }
     /**
@@ -200,10 +200,10 @@ public class ISUgui extends javax.swing.JFrame {
 
     private void btnbuyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnbuyActionPerformed
         int item = lstresources.getSelectedIndex();
-        int cost = generatorList.get(item).getCost();
+        int cost = ((PGnormal)generatorList.get(item)).getCost();
         Game.decreaseResources(cost);
         txtres.setText(String.valueOf(Game.resources));
-        generatorList.get(item).upQuantity();
+        ((PGnormal)generatorList.get(item)).upQuantity();
         txtinfo.setText(generatorList.get(item).toString());
         AutoIncrease.increase(item+1);
         checkButtons();
@@ -213,11 +213,11 @@ public class ISUgui extends javax.swing.JFrame {
         //upgrades one of the units to be super awesome
         //still have to add effect and instantiate a new object
         int item = lstresources.getSelectedIndex();
-        if (generatorList.get(item).getQuantity()>0){
-            int cost = generatorList.get(item).getBaseCost() * 100;
+        if (((PGnormal)generatorList.get(item)).getQuantity()>0){
+            int cost = ((PGnormal)generatorList.get(item)).getBaseCost() * 100;
             Game.decreaseResources(cost);
             txtres.setText(String.valueOf(Game.resources));
-            generatorList.get(item).downQuantity();
+            ((PGnormal)generatorList.get(item)).downQuantity();
             txtinfo.setText(generatorList.get(item).toString());
             checkButtons();
         }
@@ -238,9 +238,9 @@ public class ISUgui extends javax.swing.JFrame {
         }
         else{
             int item = lstresources.getSelectedIndex();
-            if (Game.getRes() >= generatorList.get(item).getCost()) btnbuy.setEnabled (true);
+            if (Game.getRes() >= ((PGnormal)generatorList.get(item)).getCost()) btnbuy.setEnabled (true);
             else btnbuy.setEnabled(false);
-            if (Game.getRes()>= generatorList.get(item).getBaseCost()*100) btnupgrade.setEnabled(true);
+            if (Game.getRes()>= ((PGnormal)generatorList.get(item)).getBaseCost()*100) btnupgrade.setEnabled(true);
             else btnupgrade.setEnabled(false);
         }
         

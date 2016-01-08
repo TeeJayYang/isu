@@ -1,11 +1,11 @@
 public abstract class PointGenerator{
-    protected int quantity = 0;
-    protected double rate, basecost;
+    protected int quantity = 0, rate;
+    protected double basecost;
     protected String name;
     public final void setQuantity(int q){
         quantity = q;
     }
-    public final double getRate(){
+    public final int getRate(){
         return rate;
     }
     public final int getQuantity(){

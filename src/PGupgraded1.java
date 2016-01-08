@@ -1,9 +1,8 @@
 public class PGupgraded1 extends PointGenerator{
 
-    public PGupgraded1(int c, int r, String n){
-        basecost = c;
-        rate = r;
-        name = n;
+    public PGupgraded1(int r, String n){
+        rate = r*100;
+        name = n + " (Upgraded)";
     }
     public void upgrade() {
         System.out.print("WORK IN PROGRESS");
