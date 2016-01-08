@@ -1,6 +1,7 @@
 import java.util.ArrayList;
 import java.util.Timer;
 import javax.swing.DefaultListModel;
+import javax.swing.JOptionPane;
 public class ISUgui extends javax.swing.JFrame {
     Timer t;
     Updater u;
@@ -11,6 +12,7 @@ public class ISUgui extends javax.swing.JFrame {
             initObjects();
             txtres.setText(Game.ToString());
             btnbuy.setEnabled(false);
+            this.setResizable(false);
     }
     private void initObjects(){
         //for scheduled increments
@@ -20,11 +22,11 @@ public class ISUgui extends javax.swing.JFrame {
         //connecting the task to the timer
         t.schedule(u, 0, 1000);
         //first point generator
-        generatorList.add(new PGnormal(10, 1, "Resource Generator 1"));
+        generatorList.add(new PGnormal(10, 1, "Miner"));
         model.addElement(generatorList.get(0).getName());
-        generatorList.add(new PGnormal(300, 10, "Resource Generator 2"));
+        generatorList.add(new PGnormal(300, 10, "Auto Drill"));
         model.addElement(generatorList.get(1).getName());
-        generatorList.add(new PGnormal(1200, 100, "Resource Generator 3"));
+        generatorList.add(new PGnormal(1200, 100, "Mining Robot"));
         model.addElement(generatorList.get(2).getName());
         lstresources.setModel(model);
     }
@@ -49,6 +51,7 @@ public class ISUgui extends javax.swing.JFrame {
         labelincrease = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
+        btnupgrade = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Generic Idle Game");
@@ -102,6 +105,13 @@ public class ISUgui extends javax.swing.JFrame {
 
         jLabel3.setText("Info");
 
+        btnupgrade.setText("Upgrade");
+        btnupgrade.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnupgradeActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -125,7 +135,10 @@ public class ISUgui extends javax.swing.JFrame {
                                 .addComponent(txtres, javax.swing.GroupLayout.PREFERRED_SIZE, 191, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(labelincrease))
-                            .addComponent(btnbuy))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(btnbuy)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(btnupgrade)))
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel2)
@@ -154,7 +167,9 @@ public class ISUgui extends javax.swing.JFrame {
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 156, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 156, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnbuy)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnbuy)
+                    .addComponent(btnupgrade))
                 .addContainerGap(114, Short.MAX_VALUE))
         );
 
@@ -189,11 +204,27 @@ public class ISUgui extends javax.swing.JFrame {
         Game.decreaseResources(cost);
         txtres.setText(String.valueOf(Game.resources));
         generatorList.get(item).upQuantity();
-        generatorList.get(item).upCost();
         txtinfo.setText(generatorList.get(item).toString());
         AutoIncrease.increase(item+1);
         checkButtons();
     }//GEN-LAST:event_btnbuyActionPerformed
+
+    private void btnupgradeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnupgradeActionPerformed
+        //upgrades one of the units to be super awesome
+        //still have to add effect and instantiate a new object
+        int item = lstresources.getSelectedIndex();
+        if (generatorList.get(item).getQuantity()>0){
+            int cost = generatorList.get(item).getBaseCost() * 100;
+            Game.decreaseResources(cost);
+            txtres.setText(String.valueOf(Game.resources));
+            generatorList.get(item).downQuantity();
+            txtinfo.setText(generatorList.get(item).toString());
+            checkButtons();
+        }
+        else{
+            JOptionPane.showMessageDialog(rootPane, "You need at least one unit to upgrade!");
+        }
+    }//GEN-LAST:event_btnupgradeActionPerformed
     public static void updateCall(int increase){
         Game.increaseResources(increase);
         labelincrease.setText("Idle Increase: " + increase + "/s");
@@ -201,12 +232,18 @@ public class ISUgui extends javax.swing.JFrame {
         checkButtons();
     }
     private static void checkButtons (){
-        if (!lstresources.isSelectionEmpty()){
+        if (lstresources.isSelectionEmpty()){
+            btnbuy.setEnabled(false);
+            btnupgrade.setEnabled(false);
+        }
+        else{
             int item = lstresources.getSelectedIndex();
             if (Game.getRes() >= generatorList.get(item).getCost()) btnbuy.setEnabled (true);
             else btnbuy.setEnabled(false);
+            if (Game.getRes()>= generatorList.get(item).getBaseCost()*100) btnupgrade.setEnabled(true);
+            else btnupgrade.setEnabled(false);
         }
-        else btnbuy.setEnabled(false);
+        
     }
     /**
      * @param args the command line arguments
@@ -247,10 +284,11 @@ public class ISUgui extends javax.swing.JFrame {
     
     //custom variable declaration
     //this is because some elements are 
-    //required to be static
+    //required to be static to be called from static methods
     private javax.swing.JButton btnIncrease;
     private static javax.swing.JButton btnbuy;
     private static javax.swing.JButton btndouble;
+    private static javax.swing.JButton btnupgrade;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -265,6 +303,7 @@ public class ISUgui extends javax.swing.JFrame {
     private javax.swing.JButton btnIncrease;
     private javax.swing.JButton btnbuy;
     private javax.swing.JButton btndouble;
+    private javax.swing.JButton btnupgrade;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

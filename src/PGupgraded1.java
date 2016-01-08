@@ -1,6 +1,6 @@
+public class PGupgraded1 extends PointGenerator{
 
-public class PGnormal extends PointGenerator{
-    public PGnormal(int c, int r, String n){
+    public PGupgraded1(int c, int r, String n){
         basecost = c;
         rate = r;
         name = n;
@@ -9,6 +9,6 @@ public class PGnormal extends PointGenerator{
         System.out.print("WORK IN PROGRESS");
     }
     public String toString(){
-        return super.toString() + "Type: Normal\n";
+        return super.toString() + "Type: Upgraded\n";
     } 
 }

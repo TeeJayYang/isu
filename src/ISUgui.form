@@ -55,7 +55,11 @@
                               <EmptySpace max="-2" attributes="0"/>
                               <Component id="labelincrease" min="-2" max="-2" attributes="0"/>
                           </Group>
-                          <Component id="btnbuy" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Group type="102" alignment="0" attributes="0">
+                              <Component id="btnbuy" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="btnupgrade" min="-2" max="-2" attributes="0"/>
+                          </Group>
                       </Group>
                       <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                   </Group>
@@ -94,7 +98,10 @@
                   <Component id="jScrollPane2" min="-2" pref="156" max="-2" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
-              <Component id="btnbuy" min="-2" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="btnbuy" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="btnupgrade" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
               <EmptySpace pref="114" max="32767" attributes="0"/>
           </Group>
       </Group>
@@ -185,6 +192,14 @@
       <Properties>
         <Property name="text" type="java.lang.String" value="Info"/>
       </Properties>
+    </Component>
+    <Component class="javax.swing.JButton" name="btnupgrade">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Upgrade"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnupgradeActionPerformed"/>
+      </Events>
     </Component>
   </SubComponents>
 </Form>
