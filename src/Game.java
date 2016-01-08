@@ -1,7 +1,8 @@
 
 public class Game {
     static int resources = 0;
-
+    public Game(){
+    }
     public static int getRes(){
         return resources;
     }
