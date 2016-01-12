@@ -1,3 +1,12 @@
+
+
+//////WORK ON THE LIST THAT BECOMSE THE LIST OF UPGRADED UNITS AND STUFF
+
+
+
+
+
+
 import java.util.ArrayList;
 import java.util.Timer;
 import javax.swing.DefaultListModel;
@@ -5,8 +14,11 @@ import javax.swing.JOptionPane;
 public class ISUgui extends javax.swing.JFrame {
     Timer t;
     Updater u;
-    DefaultListModel model= new DefaultListModel();
+    static DefaultListModel normalmodel= new DefaultListModel();
+    static DefaultListModel upgraded= new DefaultListModel();
     static ArrayList generatorList = new ArrayList();
+    static ArrayList upgradedList = new ArrayList();
+    boolean isUpgradedList = false;
         public ISUgui() {
             initComponents();
             initObjects();
@@ -21,14 +33,25 @@ public class ISUgui extends javax.swing.JFrame {
         u = new Updater();
         //connecting the task to the timer
         t.schedule(u, 0, 1000);
-        //first point generator
+        //list of normal point generators and list model
         generatorList.add(new PGnormal(10, 1, "Miner"));
-        model.addElement(((PGnormal)generatorList.get(0)).getName());
+        System.out.println(generatorList);
+        normalmodel.addElement(((PGnormal)generatorList.get(0)).getName());
+        System.out.println(generatorList);
         generatorList.add(new PGnormal(300, 10, "Auto Drill"));
-        model.addElement(((PGnormal)generatorList.get(1)).getName());
+        normalmodel.addElement(((PGnormal)generatorList.get(1)).getName());
+        System.out.println(generatorList);
         generatorList.add(new PGnormal(1200, 100, "Mining Robot"));
-        model.addElement(((PGnormal)generatorList.get(0)).getName());
-        lstresources.setModel(model);
+        normalmodel.addElement(((PGnormal)generatorList.get(2)).getName());
+        //sets list to the model
+        lstresources.setModel(normalmodel);
+        //list of upgraded point generators and list model
+        upgradedList.add(new PGupgraded(1, "Miner"));
+        upgraded.addElement(((PGupgraded)upgradedList.get(0)).getName());
+        upgradedList.add(new PGupgraded(10, "Auto Drill"));
+        upgraded.addElement(((PGupgraded)upgradedList.get(1)).getName());
+        upgradedList.add(new PGupgraded(100, "Mining Robot"));
+        upgraded.addElement(((PGupgraded)upgradedList.get(0)).getName());
     }
     /**
      * This method is called from within the constructor to initialize the form.
@@ -52,6 +75,7 @@ public class ISUgui extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         btnupgrade = new javax.swing.JButton();
+        chkupgraded = new javax.swing.JCheckBox();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Generic Idle Game");
@@ -112,6 +136,23 @@ public class ISUgui extends javax.swing.JFrame {
             }
         });
 
+        chkupgraded.setText("Upgraded");
+        chkupgraded.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                chkupgradedStateChanged(evt);
+            }
+        });
+        chkupgraded.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                chkupgradedMouseClicked(evt);
+            }
+        });
+        chkupgraded.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
+            public void propertyChange(java.beans.PropertyChangeEvent evt) {
+                chkupgradedPropertyChange(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -124,7 +165,12 @@ public class ISUgui extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 246, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jLabel3))
+                    .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(chkupgraded)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(btnIncrease)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -139,11 +185,7 @@ public class ISUgui extends javax.swing.JFrame {
                                 .addComponent(btnbuy)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(btnupgrade)))
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel2)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jLabel3)))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -167,10 +209,12 @@ public class ISUgui extends javax.swing.JFrame {
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 156, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 156, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(chkupgraded)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnbuy)
                     .addComponent(btnupgrade))
-                .addContainerGap(114, Short.MAX_VALUE))
+                .addContainerGap(93, Short.MAX_VALUE))
         );
 
         pack();
@@ -181,7 +225,7 @@ public class ISUgui extends javax.swing.JFrame {
         //of the manual increase
         Game.increaseResources(ManualIncrease.incrementAmount);
         txtres.setText(Game.ToString());
-        checkButtons();
+        checkInterface();
     }//GEN-LAST:event_btnIncreaseActionPerformed
 
     private void btndoubleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btndoubleActionPerformed
@@ -193,9 +237,11 @@ public class ISUgui extends javax.swing.JFrame {
     }//GEN-LAST:event_lstresourcesMouseClicked
 
     private void lstresourcesMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lstresourcesMouseReleased
-        int item = lstresources.getSelectedIndex();
-        txtinfo.setText(generatorList.get(item).toString());
-        checkButtons();
+        if (!chkupgraded.isSelected()){
+            int item = lstresources.getSelectedIndex();
+            txtinfo.setText(generatorList.get(item).toString());
+            checkInterface();
+        }
     }//GEN-LAST:event_lstresourcesMouseReleased
 
     private void btnbuyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnbuyActionPerformed
@@ -205,8 +251,8 @@ public class ISUgui extends javax.swing.JFrame {
         txtres.setText(String.valueOf(Game.resources));
         ((PGnormal)generatorList.get(item)).upQuantity();
         txtinfo.setText(generatorList.get(item).toString());
-        AutoIncrease.increase(item+1);
-        checkButtons();
+        AutoIncrease.increase(null,item+1);
+        checkInterface();
     }//GEN-LAST:event_btnbuyActionPerformed
 
     private void btnupgradeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnupgradeActionPerformed
@@ -219,29 +265,50 @@ public class ISUgui extends javax.swing.JFrame {
             txtres.setText(String.valueOf(Game.resources));
             ((PGnormal)generatorList.get(item)).downQuantity();
             txtinfo.setText(generatorList.get(item).toString());
-            checkButtons();
+            checkInterface();
         }
         else{
             JOptionPane.showMessageDialog(rootPane, "You need at least one unit to upgrade!");
         }
     }//GEN-LAST:event_btnupgradeActionPerformed
+
+    private void chkupgradedPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_chkupgradedPropertyChange
+    }//GEN-LAST:event_chkupgradedPropertyChange
+    private void chkupgradedStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_chkupgradedStateChanged
+    }//GEN-LAST:event_chkupgradedStateChanged
+
+    private void chkupgradedMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_chkupgradedMouseClicked
+
+    }//GEN-LAST:event_chkupgradedMouseClicked
     public static void updateCall(int increase){
         Game.increaseResources(increase);
         labelincrease.setText("Idle Increase: " + increase + "/s");
         txtres.setText(Game.ToString());
-        checkButtons();
+        checkInterface();
     }
-    private static void checkButtons (){
+    private static void checkInterface(){
+        if(chkupgraded.isSelected()){
+            lstresources.setModel(upgraded);
+        }
+        else{
+            lstresources.setModel(normalmodel);
+        }
         if (lstresources.isSelectionEmpty()){
             btnbuy.setEnabled(false);
             btnupgrade.setEnabled(false);
         }
         else{
-            int item = lstresources.getSelectedIndex();
-            if (Game.getRes() >= ((PGnormal)generatorList.get(item)).getCost()) btnbuy.setEnabled (true);
-            else btnbuy.setEnabled(false);
-            if (Game.getRes()>= ((PGnormal)generatorList.get(item)).getBaseCost()*100) btnupgrade.setEnabled(true);
-            else btnupgrade.setEnabled(false);
+            if (!chkupgraded.isSelected()){
+                int item = lstresources.getSelectedIndex();
+                if (Game.getRes() >= ((PGnormal)generatorList.get(item)).getCost()) btnbuy.setEnabled (true);
+                else btnbuy.setEnabled(false);
+                if (Game.getRes()>= ((PGnormal)generatorList.get(item)).getBaseCost()*100) btnupgrade.setEnabled(true);
+                else btnupgrade.setEnabled(false);
+            }
+            else{
+                btnbuy.setEnabled(false);
+                btnupgrade.setEnabled(false);
+            }
         }
         
     }
@@ -298,12 +365,14 @@ public class ISUgui extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane2;
     private static javax.swing.JTextArea txtinfo;
     private static javax.swing.JLabel labelincrease;
+    private static javax.swing.JCheckBox chkupgraded;
 /*
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnIncrease;
     private javax.swing.JButton btnbuy;
     private javax.swing.JButton btndouble;
     private javax.swing.JButton btnupgrade;
+    private javax.swing.JCheckBox chkupgraded;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

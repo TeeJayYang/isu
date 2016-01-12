@@ -1,5 +1,5 @@
-
 public class PGnormal extends PointGenerator{
+    
     public PGnormal(int c, int r, String n){
         basecost = c;
         rate = r;

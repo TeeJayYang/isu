@@ -1,6 +1,6 @@
-public class PGupgraded1 extends PointGenerator{
+public class PGupgraded extends PointGenerator{
 
-    public PGupgraded1(int r, String n){
+    public PGupgraded(int r, String n){
         rate = r*100;
         name = n + " (Upgraded)";
     }
