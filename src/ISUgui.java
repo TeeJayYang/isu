@@ -35,12 +35,9 @@ public class ISUgui extends javax.swing.JFrame {
         t.schedule(u, 0, 1000);
         //list of normal point generators and list model
         generatorList.add(new PGnormal(10, 1, "Miner"));
-        System.out.println(generatorList);
         normalmodel.addElement(((PGnormal)generatorList.get(0)).getName());
-        System.out.println(generatorList);
         generatorList.add(new PGnormal(300, 10, "Auto Drill"));
         normalmodel.addElement(((PGnormal)generatorList.get(1)).getName());
-        System.out.println(generatorList);
         generatorList.add(new PGnormal(1200, 100, "Mining Robot"));
         normalmodel.addElement(((PGnormal)generatorList.get(2)).getName());
         //sets list to the model
@@ -51,7 +48,7 @@ public class ISUgui extends javax.swing.JFrame {
         upgradedList.add(new PGupgraded(10, "Auto Drill"));
         upgraded.addElement(((PGupgraded)upgradedList.get(1)).getName());
         upgradedList.add(new PGupgraded(100, "Mining Robot"));
-        upgraded.addElement(((PGupgraded)upgradedList.get(0)).getName());
+        upgraded.addElement(((PGupgraded)upgradedList.get(2)).getName());
     }
     /**
      * This method is called from within the constructor to initialize the form.
@@ -161,16 +158,11 @@ public class ISUgui extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 173, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 246, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jLabel3))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(chkupgraded)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(btnIncrease)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -180,12 +172,19 @@ public class ISUgui extends javax.swing.JFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(txtres, javax.swing.GroupLayout.PREFERRED_SIZE, 191, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(labelincrease))
+                                .addComponent(labelincrease)))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 173, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(chkupgraded)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(btnbuy)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(btnupgrade)))
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 246, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -205,15 +204,16 @@ public class ISUgui extends javax.swing.JFrame {
                     .addComponent(jLabel2)
                     .addComponent(jLabel3))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 156, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 156, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(chkupgraded)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnbuy)
-                    .addComponent(btnupgrade))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 156, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 156, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(chkupgraded)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(btnbuy)
+                            .addComponent(btnupgrade))))
                 .addContainerGap(93, Short.MAX_VALUE))
         );
 
@@ -234,14 +234,21 @@ public class ISUgui extends javax.swing.JFrame {
     }//GEN-LAST:event_btndoubleActionPerformed
 
     private void lstresourcesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lstresourcesMouseClicked
+    
     }//GEN-LAST:event_lstresourcesMouseClicked
 
     private void lstresourcesMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lstresourcesMouseReleased
-        if (!chkupgraded.isSelected()){
-            int item = lstresources.getSelectedIndex();
-            txtinfo.setText(generatorList.get(item).toString());
-            checkInterface();
-        }
+    if (lstresources.getSelectedIndex() == -1) return;//this doesnt seem neccessary but actually prevents a random error
+    if (!chkupgraded.isSelected()){
+        int item = lstresources.getSelectedIndex();
+        txtinfo.setText(generatorList.get(item).toString());
+        checkInterface();
+    }
+    else {
+        int item = lstresources.getSelectedIndex();
+        txtinfo.setText(upgradedList.get(item).toString());
+        checkInterface();
+    }
     }//GEN-LAST:event_lstresourcesMouseReleased
 
     private void btnbuyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnbuyActionPerformed
@@ -251,7 +258,7 @@ public class ISUgui extends javax.swing.JFrame {
         txtres.setText(String.valueOf(Game.resources));
         ((PGnormal)generatorList.get(item)).upQuantity();
         txtinfo.setText(generatorList.get(item).toString());
-        AutoIncrease.increase(null,item+1);
+        AutoIncrease.increase("Normal",item+1);
         checkInterface();
     }//GEN-LAST:event_btnbuyActionPerformed
 
@@ -278,8 +285,17 @@ public class ISUgui extends javax.swing.JFrame {
     }//GEN-LAST:event_chkupgradedStateChanged
 
     private void chkupgradedMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_chkupgradedMouseClicked
-
+        //for some reason some times if the checkbox is clicked, it doesnt change the check mark
+        //we check for the actual selection boolean to make the list change more consistent
+        if (chkupgraded.isSelected()){
+            lstresources.setModel(upgraded);
+        }
+        else lstresources.setModel(normalmodel);
+        txtinfo.setText("");
+        checkInterface();
     }//GEN-LAST:event_chkupgradedMouseClicked
+    //sorting
+    
     public static void updateCall(int increase){
         Game.increaseResources(increase);
         labelincrease.setText("Idle Increase: " + increase + "/s");
@@ -287,18 +303,24 @@ public class ISUgui extends javax.swing.JFrame {
         checkInterface();
     }
     private static void checkInterface(){
+        //changes the list model depending on check box
+        //inner if statements prevent constant refreshing and clearing of selection
         if(chkupgraded.isSelected()){
-            lstresources.setModel(upgraded);
+            if (lstresources.getModel() == normalmodel){
+                lstresources.setModel(upgraded);
+            }
         }
         else{
-            lstresources.setModel(normalmodel);
+            if (lstresources.getModel()==upgraded){
+                lstresources.setModel(normalmodel);
+            }
         }
         if (lstresources.isSelectionEmpty()){
             btnbuy.setEnabled(false);
             btnupgrade.setEnabled(false);
         }
         else{
-            if (!chkupgraded.isSelected()){
+            if (!chkupgraded.isSelected() && !lstresources.isSelectionEmpty()){
                 int item = lstresources.getSelectedIndex();
                 if (Game.getRes() >= ((PGnormal)generatorList.get(item)).getCost()) btnbuy.setEnabled (true);
                 else btnbuy.setEnabled(false);
@@ -310,7 +332,6 @@ public class ISUgui extends javax.swing.JFrame {
                 btnupgrade.setEnabled(false);
             }
         }
-        
     }
     /**
      * @param args the command line arguments
@@ -366,6 +387,9 @@ public class ISUgui extends javax.swing.JFrame {
     private static javax.swing.JTextArea txtinfo;
     private static javax.swing.JLabel labelincrease;
     private static javax.swing.JCheckBox chkupgraded;
+    private static javax.swing.JRadioButton radiocost;
+    private static javax.swing.JRadioButton radiorate;
+    private static javax.swing.ButtonGroup sortgroup;
 /*
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnIncrease;

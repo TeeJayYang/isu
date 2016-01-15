@@ -8,6 +8,10 @@ public class PGupgraded extends PointGenerator{
         System.out.print("WORK IN PROGRESS");
     }
     public String toString(){
-        return super.toString() + "Type: Upgraded\n";
+        String str = "=====" + name + "=====\n";
+        str += "Generation rate per unit: " + rate + "/second\n";
+        str += "Number of units: " + quantity + "\n";
+        str += "Type: Upgraded\n";
+        return str;
     } 
 }
