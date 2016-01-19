@@ -1,4 +1,5 @@
 public class ManualIncrease {
+    //increase per moues click
     public static int incrementAmount = 1;
     public ManualIncrease(){
     }

@@ -1,7 +1,7 @@
 
 
 //////WORK ON THE LIST THAT BECOMSE THE LIST OF UPGRADED UNITS AND STUFF
-///STILL HAVE TO INSATNTIATE UPGRADED GEERATOR IN THE UPGRADED BUTTON SECTION
+//DURABILTIY OF UPGRADED UNITS? :DDDD
 
 
 
@@ -23,7 +23,8 @@ public class ISUgui extends javax.swing.JFrame {
     boolean isUpgradedList = false;
         public ISUgui() {
             initComponents();
-            initObjects();
+            initObjects();//create all the lists and timer
+            //initialize the GUI to its beginning state
             txtres.setText(Game.ToString());
             btnbuy.setEnabled(false);
             this.setResizable(false);
@@ -227,12 +228,13 @@ public class ISUgui extends javax.swing.JFrame {
         //of the manual increase
         Game.increaseResources(ManualIncrease.incrementAmount);
         txtres.setText(Game.ToString());
-        checkInterface();
+        checkInterface();//making sure that the button update is instant
     }//GEN-LAST:event_btnIncreaseActionPerformed
 
     private void btndoubleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btndoubleActionPerformed
-        ManualIncrease.doubleIncrement();
-        btnIncrease.setText("+" + ManualIncrease.incrementAmount);
+        //this is simply a developer function for now
+        ManualIncrease.doubleIncrement();//double the increment
+        btnIncrease.setText("+" + ManualIncrease.incrementAmount);//update button text
     }//GEN-LAST:event_btndoubleActionPerformed
 
     private void lstresourcesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lstresourcesMouseClicked
@@ -241,40 +243,42 @@ public class ISUgui extends javax.swing.JFrame {
 
     private void lstresourcesMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lstresourcesMouseReleased
     if (lstresources.getSelectedIndex() == -1) return;//this doesnt seem neccessary but actually prevents a random error
-    if (!chkupgraded.isSelected()){
+    if (!chkupgraded.isSelected()){//this is the regular list (non upgraded)
         int item = lstresources.getSelectedIndex();
-        txtinfo.setText(generatorList.get(item).toString());
-        checkInterface();
+        txtinfo.setText(generatorList.get(item).toString()); //brings up info of the item
+        checkInterface();//making sure that the button update is instant
     }
     else {
         int item = lstresources.getSelectedIndex();
-        txtinfo.setText(upgradedList.get(item).toString());
-        checkInterface();
+        txtinfo.setText(upgradedList.get(item).toString());//brings up info of the upgraded item
+        checkInterface();//making sure that the button update is instant
     }
     }//GEN-LAST:event_lstresourcesMouseReleased
 
     private void btnbuyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnbuyActionPerformed
         int item = lstresources.getSelectedIndex();
         int cost = ((PGnormal)generatorList.get(item)).getCost();
-        Game.decreaseResources(cost);
-        txtres.setText(String.valueOf(Game.resources));
-        ((PGnormal)generatorList.get(item)).upQuantity();
-        txtinfo.setText(generatorList.get(item).toString());
-        AutoIncrease.increase("Normal",item+1);
-        checkInterface();
+        Game.decreaseResources(cost);//"buy" the item, decrease resources
+        txtres.setText(String.valueOf(Game.resources));//update resource text
+        ((PGnormal)generatorList.get(item)).upQuantity();//increase appropriate generator by 1
+        txtinfo.setText(generatorList.get(item).toString());//update item info text
+        AutoIncrease.increase("Normal",item+1);//update the automatic increase by the appropriate item
+        checkInterface();//making sure that the button update is instant
     }//GEN-LAST:event_btnbuyActionPerformed
 
     private void btnupgradeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnupgradeActionPerformed
-        //upgrades one of the units to be super awesome
-        //still have to add effect and instantiate a new object
+        //upgrades one of the units to have 100x the current rate
         int item = lstresources.getSelectedIndex();
-        if (((PGnormal)generatorList.get(item)).getQuantity()>0){
-            int cost = ((PGnormal)generatorList.get(item)).getBaseCost() * 100;
-            Game.decreaseResources(cost);
-            txtres.setText(String.valueOf(Game.resources));
-            ((PGnormal)generatorList.get(item)).downQuantity();
-            txtinfo.setText(generatorList.get(item).toString());
-            checkInterface();
+        if (((PGnormal)generatorList.get(item)).getQuantity()>0){//only allow upgrade if theres anything to upgrade
+            int cost = ((PGnormal)generatorList.get(item)).getBaseCost() * 100;//a hundred times the normal cost
+            Game.decreaseResources(cost);//deduct the cost from resources
+            txtres.setText(String.valueOf(Game.resources));//update resources counter
+            ((PGnormal)generatorList.get(item)).downQuantity();//decreaes the number of normal units by 1
+            txtinfo.setText(generatorList.get(item).toString());//update info text
+            ((PGupgraded)upgradedList.get(item)).upQuantity();//increases the number of upgraded units of the same type by 1
+            AutoIncrease.increase("Upgraded", item+1);//update the auto increase to match the units
+            AutoIncrease.decrease("Normal",item+1);//removing the corresponding normal item
+            checkInterface();//making sure that the button update is instant
         }
         else{
             JOptionPane.showMessageDialog(rootPane, "You need at least one unit to upgrade!");
@@ -287,23 +291,24 @@ public class ISUgui extends javax.swing.JFrame {
     }//GEN-LAST:event_chkupgradedStateChanged
 
     private void chkupgradedMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_chkupgradedMouseClicked
-        //for some reason some times if the checkbox is clicked, it doesnt change the check mark
+        //for some reason sometimes if the checkbox is clicked, it doesnt change the check mark
         //we check for the actual selection boolean to make the list change more consistent
         if (chkupgraded.isSelected()){
             lstresources.setModel(upgraded);
         }
         else lstresources.setModel(normalmodel);
         txtinfo.setText("");
-        checkInterface();
+        checkInterface();//making sure that the button update is instant
     }//GEN-LAST:event_chkupgradedMouseClicked
-    //sorting
-    
+  
     public static void updateCall(int increase){
-        Game.increaseResources(increase);
-        labelincrease.setText("Idle Increase: " + increase + "/s");
-        txtres.setText(Game.ToString());
-        checkInterface();
+        Game.increaseResources(increase);//increase the resources
+        labelincrease.setText("Idle Increase: " + increase + "/s");//updates the point generation per second text
+        txtres.setText(Game.ToString());//updates the resources text
+        checkInterface();//check the buttons and things again to make sure theyre appropraitly enabled and disabled
     }
+    
+    //the bulk of the interface updating
     private static void checkInterface(){
         //changes the list model depending on check box
         //inner if statements prevent constant refreshing and clearing of selection
@@ -317,6 +322,13 @@ public class ISUgui extends javax.swing.JFrame {
                 lstresources.setModel(normalmodel);
             }
         }
+//        this code is to enable or disable various buttons 
+//        depending on if your resources are enough to afford
+        
+//        it also works as a resource checker
+//        if you cannot afford to buy something, the button is disabled
+//        this way you wont be able to run the buy methods to buy things when 
+//        youre not supposed to 
         if (lstresources.isSelectionEmpty()){
             btnbuy.setEnabled(false);
             btnupgrade.setEnabled(false);

@@ -1,4 +1,7 @@
 public abstract class PointGenerator{
+    //parent of the point generators
+    //has rates, quantity, basecosts
+    //mostly getters and setters
     protected int quantity = 0, rate;
     protected double basecost;
     protected String name;
@@ -12,6 +15,8 @@ public abstract class PointGenerator{
         return quantity;
     }
     public final int getCost(){
+        //base cost remains the same
+        //but the actual cost increse per unit owned
         int finalcost = (int)(basecost * Math.pow(1.5, quantity));
         return finalcost;
     }
