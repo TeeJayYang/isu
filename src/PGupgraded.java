@@ -3,22 +3,37 @@ public class PGupgraded extends PointGenerator{
     int upgradeCost;
     //since the upgraded version is 100x better
     //code updates rate to be 100x more
-    public PGupgraded(int r, String n){
-        super(r, n);
+    public PGupgraded(int r, String n, int t){
+        super(r, n, t);
         rate *=100;
         name += " (Upgraded)";
     }
     public void upgrade() {
         System.out.print("WORK IN PROGRESS");
     }
-    public int getUpgradeCost(int baseCost) {
-        int finalcost = baseCost * 100;
-        finalcost *=  Math.pow(1.5, quantity);
-        return finalcost;
+    //exclusive method
+    public int getUpgradeCost(int bc) {
+        calcUpgradeCost(bc);
+        return upgradeCost;
     }
-     public String toString(){
+    
+    private void calcUpgradeCost(int bc){
+        upgradeCost = bc * 100;
+        upgradeCost *=  Math.pow(1.5, quantity);
+    }
+    @Override
+    public String toString(){
         String str = super.toString();
+        str += "Price efficiency: " + calcRatetoPrice() + "points/$\n";
         str += "Type: Upgraded\n";
         return str;
     } 
+
+    @Override
+    public double calcRatetoPrice() {
+        double cost = upgradeCost;
+        double ratio = rate/cost;
+        ratio = (double)Math.round(ratio * 100d) / 100d;
+        return ratio;
+    }
 }

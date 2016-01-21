@@ -1,9 +1,7 @@
 
 
 //////WORK ON THE LIST THAT BECOMSE THE LIST OF UPGRADED UNITS AND STUFF
-//abstract methods
 //sorted array of some sort
-//need to still write code for total point generation total, and price to generation ratio
 
 
 
@@ -16,8 +14,8 @@ public class ISUgui extends javax.swing.JFrame {
     Updater u;
     static DefaultListModel normalmodel= new DefaultListModel();
     static DefaultListModel upgraded= new DefaultListModel();
-    static ArrayList generatorList = new ArrayList();
-    static ArrayList upgradedList = new ArrayList();
+    static ArrayList<PGnormal> generatorList = new ArrayList();
+    static ArrayList<PGupgraded> upgradedList = new ArrayList();
     boolean isUpgradedList = false;
         public ISUgui() {
             initComponents();
@@ -28,28 +26,36 @@ public class ISUgui extends javax.swing.JFrame {
             this.setResizable(false);
     }
     private void initObjects(){
-        //for scheduled point increments
-        t = new Timer();
-        //the increment itself
-        u = new Updater();
-        //connecting the task to the timer
-        t.schedule(u, 0, 1000);
         //list of normal point generators and list model
-        generatorList.add(new PGnormal(10, 1, "Miner"));
-        normalmodel.addElement(((PGnormal)generatorList.get(0)).getName());
-        generatorList.add(new PGnormal(300, 10, "Auto Drill"));
-        normalmodel.addElement(((PGnormal)generatorList.get(1)).getName());
-        generatorList.add(new PGnormal(1200, 100, "Mining Robot"));
-        normalmodel.addElement(((PGnormal)generatorList.get(2)).getName());
+        generatorList.add(new PGnormal(10, 1, "Miner",0));
+        normalmodel.addElement(generatorList.get(0).getName());
+        generatorList.add(new PGnormal(300, 10, "Auto Drill",1));
+        normalmodel.addElement(generatorList.get(1).getName());
+        generatorList.add(new PGnormal(1200, 100, "Mining Robot",2));
+        normalmodel.addElement(generatorList.get(2).getName());
         //sets list to the model
         lstresources.setModel(normalmodel);
         //list of upgraded point generators and list model
-        upgradedList.add(new PGupgraded(1, "Miner"));
-        upgraded.addElement(((PGupgraded)upgradedList.get(0)).getName());
-        upgradedList.add(new PGupgraded(10, "Auto Drill"));
-        upgraded.addElement(((PGupgraded)upgradedList.get(1)).getName());
-        upgradedList.add(new PGupgraded(100, "Mining Robot"));
-        upgraded.addElement(((PGupgraded)upgradedList.get(2)).getName());
+        upgradedList.add(new PGupgraded(1, "Miner",0));
+        upgraded.addElement(upgradedList.get(0).getName());
+        upgradedList.add(new PGupgraded(10, "Auto Drill",1));
+        upgraded.addElement(upgradedList.get(1).getName());
+        upgradedList.add(new PGupgraded(100, "Mining Robot",2));
+        upgraded.addElement(upgradedList.get(2).getName());
+        //setting up all the upgrade costs of the upgraded units intially
+        for (int x= 0;x<generatorList.size();x++){
+            getUpgradeCost(generatorList.get(x),upgradedList.get(x));
+        }//for scheduled point increments
+        t = new Timer();
+        //the increment itself
+        u = new Updater();
+        //setting all the sceduled increments to their proper values
+        for (int x = 0;x<generatorList.size();x++){
+            u.setRate(x, generatorList.get(x).getRate());
+        }
+        //connecting the task to the timer
+        t.schedule(u, 0, 1000);
+        
     }
     /**
      * This method is called from within the constructor to initialize the form.
@@ -205,17 +211,16 @@ public class ISUgui extends javax.swing.JFrame {
                     .addComponent(jLabel2)
                     .addComponent(jLabel3))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 156, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 156, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(chkupgraded)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(btnbuy)
-                            .addComponent(btnupgrade))))
-                .addContainerGap(93, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jScrollPane2)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 184, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(chkupgraded)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnbuy)
+                    .addComponent(btnupgrade))
+                .addContainerGap(65, Short.MAX_VALUE))
         );
 
         pack();
@@ -243,8 +248,8 @@ public class ISUgui extends javax.swing.JFrame {
     if (lstresources.getSelectedIndex() == -1) return;//this doesnt seem neccessary but actually prevents a random error
     if (!chkupgraded.isSelected()){//this is the regular list (non upgraded)
         int item = lstresources.getSelectedIndex();
-        int upgradeCost =  getUpgradeCost(((PGnormal)generatorList.get(item)),((PGupgraded)upgradedList.get(item)));
-        txtinfo.setText(((PGnormal)generatorList.get(item)).toString(upgradeCost)); //brings up info of the item
+        int upgradeCost =  getUpgradeCost(generatorList.get(item),upgradedList.get(item));
+        txtinfo.setText(generatorList.get(item).toString(upgradeCost)); //brings up info of the item
         checkInterface();//making sure that the button update is instant
     }
     else {
@@ -256,12 +261,12 @@ public class ISUgui extends javax.swing.JFrame {
 
     private void btnbuyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnbuyActionPerformed
         int item = lstresources.getSelectedIndex();
-        int cost = ((PGnormal)generatorList.get(item)).getCost();
+        int cost = generatorList.get(item).getCost();
         Game.decreaseResources(cost);//"buy" the item, decrease resources
         txtres.setText(String.valueOf(Game.resources));//update resource text
-        ((PGnormal)generatorList.get(item)).upQuantity();//increase appropriate generator by 1
-        int upgradeCost =  getUpgradeCost(((PGnormal)generatorList.get(item)),((PGupgraded)upgradedList.get(item)));
-        txtinfo.setText(((PGnormal)generatorList.get(item)).toString(upgradeCost));//update item info text
+        generatorList.get(item).upQuantity();//increase appropriate generator by 1
+        int upgradeCost =  getUpgradeCost(generatorList.get(item),upgradedList.get(item));
+        txtinfo.setText(generatorList.get(item).toString(upgradeCost));//update item info text
         AutoIncrease.increase("Normal",item+1);//update the automatic increase by the appropriate item
         checkInterface();//making sure that the button update is instant
     }//GEN-LAST:event_btnbuyActionPerformed
@@ -269,13 +274,13 @@ public class ISUgui extends javax.swing.JFrame {
     private void btnupgradeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnupgradeActionPerformed
         //upgrades one of the units to have 100x the current rate
         int item = lstresources.getSelectedIndex();
-        if (((PGnormal)generatorList.get(item)).getQuantity()>0){//only allow upgrade if theres anything to upgrade
-            int upgradeCost =  getUpgradeCost(((PGnormal)generatorList.get(item)),((PGupgraded)upgradedList.get(item)));
+        if (generatorList.get(item).getQuantity()>0){//only allow upgrade if theres anything to upgrade
+            int upgradeCost =  getUpgradeCost(generatorList.get(item),upgradedList.get(item));
             Game.decreaseResources(upgradeCost);//deduct the cost from resources
             txtres.setText(String.valueOf(Game.resources));//update resources counter
-            ((PGnormal)generatorList.get(item)).downQuantity();//decreaes the number of normal units by 1
-            txtinfo.setText(((PGnormal)generatorList.get(item)).toString(upgradeCost));//update info text
-            ((PGupgraded)upgradedList.get(item)).upQuantity();//increases the number of upgraded units of the same type by 1
+            generatorList.get(item).downQuantity();//decreaes the number of normal units by 1
+            txtinfo.setText(generatorList.get(item).toString(upgradeCost));//update info text
+            upgradedList.get(item).upQuantity();//increases the number of upgraded units of the same type by 1
             AutoIncrease.increase("Upgraded", item+1);//update the auto increase to match the units
             AutoIncrease.decrease("Normal",item+1);//removing the corresponding normal item
             checkInterface();//making sure that the button update is instant
@@ -336,9 +341,9 @@ public class ISUgui extends javax.swing.JFrame {
         }
         else{
             if (!chkupgraded.isSelected() && !lstresources.isSelectionEmpty()){
-                if (Game.getRes() >= ((PGnormal)generatorList.get(item)).getCost()) btnbuy.setEnabled (true);
+                if (Game.getRes() >= (generatorList.get(item)).getCost()) btnbuy.setEnabled (true);
                 else btnbuy.setEnabled(false);
-                int upgradeCost =  getUpgradeCost(((PGnormal)generatorList.get(item)),((PGupgraded)upgradedList.get(item)));
+                int upgradeCost =  getUpgradeCost(generatorList.get(item),upgradedList.get(item));
                 if (Game.getRes()>= upgradeCost) btnupgrade.setEnabled(true);
                 else btnupgrade.setEnabled(false);
             }
