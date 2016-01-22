@@ -1,3 +1,6 @@
+
+import java.util.Objects;
+
 public abstract class PointGenerator{
     //parent of the point generators
     //has rates, quantity, basecosts
@@ -35,5 +38,12 @@ public abstract class PointGenerator{
         str += "Number of units: " + quantity + "\n";
         return str;
     } 
+    public String toSaveString(){
+        String str = name + "\n";
+        str += tier + "\n";
+        str += rate + "\n";
+        str += quantity + "\n";
+        return str;
+    }
     public abstract double calcRatetoPrice();
 }

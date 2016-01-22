@@ -1,5 +1,5 @@
 public class PGnormal extends PointGenerator{
-    //simply initiallizes the values of basecost, rate, name
+    //simply initiallizes the values of basecost, rate, name, type
     double basecost;
     public PGnormal(int c, int r, String n, int t){
         super(r,n,t);
@@ -35,5 +35,10 @@ public class PGnormal extends PointGenerator{
         double ratio = rate/cost;
         ratio = (double)Math.round(ratio * 100d) / 100d;
         return ratio;
+    }
+    public String toSaveString(){
+        String str = super.toSaveString();
+        str += basecost +"\n";
+        return str;
     }
 }
