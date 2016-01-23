@@ -1,5 +1,7 @@
 
 import java.io.PrintWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.HashSet;
 import java.util.Iterator;
 
@@ -12,8 +14,7 @@ class SaveProfile {
         name = n;
         type = t;
     }
-    public void save(PGnormal[] pgn, PGupgraded[] pgu,PrintWriter pw){
-        pw.println(Game.resources);
+    public void save(PGnormal[] pgn, PGupgraded[] pgu, PrintWriter pw) throws IOException{
         System.out.println(Game.resources);
         for (int x=0;x<pgn.length;x++){
             norms.add(pgn[x]);
@@ -22,7 +23,7 @@ class SaveProfile {
         while (it.hasNext()){
             PGnormal pg = (PGnormal)it.next();
             System.out.print(pg.toSaveString());
-            pw.println(pg.toSaveString());
+            pw.write(pg.toSaveString());
             
         }
         for (int x=0;x<pgu.length;x++){
@@ -31,7 +32,7 @@ class SaveProfile {
         it = ups.iterator();
         while (it.hasNext()){
             PGupgraded pg = (PGupgraded)it.next();
-            pw.println(pg.toSaveString());
+            pw.write(pg.toSaveString());
         }
         
     }

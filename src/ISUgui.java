@@ -29,6 +29,9 @@ public class ISUgui extends javax.swing.JFrame {
             txtres.setText(Game.ToString());
             btnbuy.setEnabled(false);
             this.setResizable(false);
+            ///
+            
+            
     }
     private void initObjects(){
         //list of normal point generators and list model
@@ -324,7 +327,26 @@ public class ISUgui extends javax.swing.JFrame {
     }//GEN-LAST:event_chkupgradedMouseClicked
 
     private void btnsaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnsaveActionPerformed
-        save();
+        PGnormal[] pgn = new PGnormal[generatorList.size()];
+            PGupgraded[] pgu = new PGupgraded[upgradedList.size()];
+            for (int x=0;x<generatorList.size();x++){
+                pgn[x] = generatorList.get(x);
+            }
+            for (int x=0;x<upgradedList.size();x++){
+                pgu[x] = upgradedList.get(x);
+            }
+            FileWriter fw;
+            SaveProfile save = new SaveProfile("TJ", "Dev");
+            try {
+                fw = new FileWriter ("saves.txt");
+                PrintWriter p = new PrintWriter(fw);
+                System.out.println("Attempting to save");
+                save.save(pgn, pgu, p);
+                p.close();
+            }
+            catch(IOException ex){
+                System.out.println(ex);
+            }
     }//GEN-LAST:event_btnsaveActionPerformed
   
     public static void updateCall(int increase){
@@ -378,27 +400,6 @@ public class ISUgui extends javax.swing.JFrame {
         int upgradeCost = a.getBaseCost();
         upgradeCost = b.getUpgradeCost(upgradeCost);//finding the upgrade cost
         return upgradeCost;
-    }
-    public void save(){
-        
-        PGnormal[] pgn = new PGnormal[generatorList.size()];
-        PGupgraded[] pgu = new PGupgraded[upgradedList.size()];
-        for (int x=0;x<generatorList.size();x++){
-            pgn[x] = generatorList.get(x);
-        }
-        for (int x=0;x<upgradedList.size();x++){
-            pgu[x] = upgradedList.get(x);
-        }
-        FileWriter fw;
-        SaveProfile save1 = new SaveProfile("TJ", "Dev");
-        try {
-            fw = new FileWriter ("saves.txt");
-            PrintWriter p = new PrintWriter (fw);
-            save1.save(pgn, pgu, p);
-        }
-        catch(IOException ex){
-            System.out.println(ex);
-        }
     }
     
     
