@@ -1,7 +1,8 @@
 
 
-//////WORK ON THE LIST THAT BECOMSE THE LIST OF UPGRADED UNITS AND STUFF
-//sorted array of some sort
+
+
+//fixed saving, need to code in reading from a text file and loading it into a hash map "saves"
 
 
 
