@@ -1,12 +1,9 @@
 public class PGnormal extends PointGenerator{
     //simply initiallizes the values of basecost, rate, name, type
     double basecost;
-    public PGnormal(int c, int r, String n, int t){
+    public PGnormal(double c, int r, String n, int t){
         super(r,n,t);
         basecost = c;
-    }
-    public void upgrade() {
-        System.out.print("WORK IN PROGRESS");
     }
     public final int getCost(){
         //base cost remains the same

@@ -8,9 +8,6 @@ public class PGupgraded extends PointGenerator{
         rate *=100;
         name += " (Upgraded)";
     }
-    public void upgrade() {
-        System.out.print("WORK IN PROGRESS");
-    }
     //exclusive method
     public int getUpgradeCost(int bc) {
         calcUpgradeCost(bc);

@@ -72,6 +72,31 @@ public class AutoIncrease {//class for the resources generation while idle
         }
         else return 0;
     }
+
+    public static void setNumG1(int numG1) {
+        AutoIncrease.numG1 = numG1;
+    }
+
+    public static void setNumG2(int numG2) {
+        AutoIncrease.numG2 = numG2;
+    }
+
+    public static void setNumG3(int numG3) {
+        AutoIncrease.numG3 = numG3;
+    }
+
+    public static void setNumGU1(int numGU1) {
+        AutoIncrease.numGU1 = numGU1;
+    }
+
+    public static void setNumGU2(int numGU2) {
+        AutoIncrease.numGU2 = numGU2;
+    }
+
+    public static void setNumGU3(int numGU3) {
+        AutoIncrease.numGU3 = numGU3;
+    }
+    
     public static int calcTotalIncrease(int r1, int r2, int r3){
     //this returns the total increase, Updater class provides rates
         int normalincreasetotal = numG1*r1 + numG2*r2 + numG3*r3;
