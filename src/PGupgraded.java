@@ -6,7 +6,6 @@ public class PGupgraded extends PointGenerator{
     public PGupgraded(int r, String n, int t){
         super(r, n, t);
         rate *=100;
-        name += " (Upgraded)";
     }
     //exclusive method
     public int getUpgradeCost(int bc) {

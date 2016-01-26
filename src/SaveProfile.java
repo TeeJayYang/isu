@@ -28,7 +28,6 @@ class SaveProfile {
             pw.printf(pgu[x].toSaveString());
         }
         System.out.println("Save Successfull!");
-        pw.println(Game.resources);
     }
 
     public String getName() {

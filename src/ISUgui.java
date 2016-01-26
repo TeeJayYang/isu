@@ -14,6 +14,8 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 import java.util.Timer;
 import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
@@ -27,20 +29,24 @@ public class ISUgui extends javax.swing.JFrame {
     public HashMap<String,SaveProfile> saves = new HashMap<>();
     boolean isUpgradedList = false;
     String currentSave;
+    int allGameResources[] = new int [3];
         public ISUgui() {
             initComponents();
             initObjects();//create all the lists and timer
+            initStartingSaves();
+            setSave();
+            loadSaves();
             //initialize the GUI to its beginning state
             txtres.setText(Game.ToString());
             btnbuy.setEnabled(false);
-            loadSaves();
-            currentSave = "TJ";
-            if (currentSave != null){
+            try{
                 generatorList = (ArrayList<PGnormal>)saves.get(currentSave).getGeneratorList().clone();
                 upgradedList = (ArrayList<PGupgraded>)saves.get(currentSave).getUpgradedList().clone();
             }
-            System.out.println(generatorList);
-            upgradedList.equals(saves.get(currentSave).getUpgradedList());
+            catch (Exception e){
+                System.out.println(e);
+            }
+            this.setTitle(currentSave);
             this.setResizable(false);
     }
     private void initObjects(){
@@ -54,11 +60,11 @@ public class ISUgui extends javax.swing.JFrame {
         //sets list to the model
         lstresources.setModel(normalmodel);
         //list of upgraded point generators and list model
-        upgradedList.add(new PGupgraded(1, "Miner",0));
+        upgradedList.add(new PGupgraded(1, "Miner (Upgraded)",0));
         upgraded.addElement(upgradedList.get(0).getName());
-        upgradedList.add(new PGupgraded(10, "Auto Drill",1));
+        upgradedList.add(new PGupgraded(10, "Auto Drill (Upgraded)",1));
         upgraded.addElement(upgradedList.get(1).getName());
-        upgradedList.add(new PGupgraded(100, "Mining Robot",2));
+        upgradedList.add(new PGupgraded(100, "Mining Robot (Upgraded)",2));
         upgraded.addElement(upgradedList.get(2).getName());
         //setting up all the upgrade costs of the upgraded units intially
         for (int x= 0;x<generatorList.size();x++){
@@ -117,7 +123,7 @@ public class ISUgui extends javax.swing.JFrame {
 
         txtres.setEditable(false);
 
-        btndouble.setText("Double Click Power");
+        btndouble.setText("Double Click Power (DEV button)");
         btndouble.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btndoubleActionPerformed(evt);
@@ -176,7 +182,7 @@ public class ISUgui extends javax.swing.JFrame {
             }
         });
 
-        btnsave.setText("Save");
+        btnsave.setText("Save and Exit");
         btnsave.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnsaveActionPerformed(evt);
@@ -197,28 +203,29 @@ public class ISUgui extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(btnIncrease)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(btndouble))
-                            .addGroup(layout.createSequentialGroup()
                                 .addComponent(jLabel1)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(txtres, javax.swing.GroupLayout.PREFERRED_SIZE, 191, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(labelincrease)))
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 173, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(chkupgraded)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addComponent(btnbuy, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(labelincrease))
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(chkupgraded)
+                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                    .addComponent(btnbuy, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(btnupgrade, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(btnsave, javax.swing.GroupLayout.PREFERRED_SIZE, 142, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 173, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(btnIncrease))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(btnupgrade, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(btnsave, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 246, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(btndouble, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addGap(59, 59, 59))
+                                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 246, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addGap(0, 17, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -233,7 +240,7 @@ public class ISUgui extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnIncrease)
                     .addComponent(btndouble))
-                .addGap(14, 14, 14)
+                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jLabel2)
                     .addComponent(jLabel3))
@@ -249,7 +256,7 @@ public class ISUgui extends javax.swing.JFrame {
                     .addComponent(btnupgrade))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnsave)
-                .addContainerGap(36, Short.MAX_VALUE))
+                .addContainerGap(32, Short.MAX_VALUE))
         );
 
         pack();
@@ -338,25 +345,43 @@ public class ISUgui extends javax.swing.JFrame {
 
     private void btnsaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnsaveActionPerformed
         PGnormal[] pgn = new PGnormal[generatorList.size()];
-            PGupgraded[] pgu = new PGupgraded[upgradedList.size()];
-            for (int x=0;x<generatorList.size();x++){
-                pgn[x] = generatorList.get(x);
-            }
-            for (int x=0;x<upgradedList.size();x++){
-                pgu[x] = upgradedList.get(x);
-            }
-            FileWriter fw;
-            SaveProfile save = new SaveProfile("TJ", "Dev");
-            try {
-                fw = new FileWriter ("saves.txt");
-                PrintWriter p = new PrintWriter(fw);
-                System.out.println("Attempting to save");
+        PGupgraded[] pgu = new PGupgraded[upgradedList.size()];
+        for (int x=0;x<generatorList.size();x++){
+            pgn[x] = generatorList.get(x);
+        }
+        for (int x=0;x<upgradedList.size();x++){
+            pgu[x] = upgradedList.get(x);
+        }
+        FileWriter fw;
+        
+        try {
+            fw = new FileWriter ("saves.txt");
+            PrintWriter p = new PrintWriter(fw);
+            Iterator it = saves.entrySet().iterator();
+            while (it.hasNext()){
+                System.out.println("has next");
+                Map.Entry pair = (Map.Entry)it.next();
+                SaveProfile save = saves.get(pair.getKey());
+                
+                System.out.println("Attempting to save" + save);
                 save.save(pgn, pgu, p);
-                p.close();
+                if (pair.getKey()==currentSave){
+                    p.println(Game.resources);
+                }
+                else{
+                    if (pair.getKey()=="A")p.println (allGameResources[0]);
+                    if (pair.getKey()=="B")p.println (allGameResources[1]);
+                    if (pair.getKey()=="C")p.println (allGameResources[2]);
+                }
             }
-            catch(IOException ex){
-                System.out.println(ex);
-            }
+            
+            p.close();
+        }
+        catch(IOException ex){
+            System.out.println(ex);
+        }
+        JOptionPane.showMessageDialog(rootPane, "Successfully Saved!");
+        System.exit(0);
     }//GEN-LAST:event_btnsaveActionPerformed
   
     public static void updateCall(int increase){
@@ -453,12 +478,12 @@ public class ISUgui extends javax.swing.JFrame {
         try{
             FileReader fr = new FileReader ("saves.txt");
             BufferedReader br = new BufferedReader(fr);
-            while(true){
+            for (int x=0;x<3;x++){
                 String name=br.readLine();
                 if (name==null)break;
                 String type=br.readLine();
                 SaveProfile s = new SaveProfile(name, type);
-                for (int x = 0; x<3; x++){
+                for (int y = 0; y<3; y++){
                     String n = br.readLine();
                     int t = Integer.parseInt(br.readLine());
                     int r = Integer.parseInt(br.readLine());
@@ -469,7 +494,7 @@ public class ISUgui extends javax.swing.JFrame {
                     s.addPGN(pgn);
                 }
                 
-                for (int x = 0; x<3; x++){
+                for (int y = 0; y<3; y++){
                     String n = br.readLine();
                     int t = Integer.parseInt(br.readLine());
                     int r = Integer.parseInt(br.readLine());
@@ -480,15 +505,48 @@ public class ISUgui extends javax.swing.JFrame {
                 }
                 saves.put(s.getName(), s);
                 int r = Integer.parseInt(br.readLine());
-                Game.increaseResources(r);
+                allGameResources[x] = r;
+                if (x == 0 && "A".equals(currentSave))Game.increaseResources(allGameResources[x]);
+                else if (x == 1 && "B".equals(currentSave)) Game.increaseResources(allGameResources[x]);
+                else if (x == 2 && "C".equals(currentSave)) Game.increaseResources(allGameResources[x]);
             }
+            
             br.close();
         }
         catch(Exception e){
             System.out.println(e.toString());
         }
     }
-    
+    private void setSave() {
+         SaveForm form = new SaveForm (this, true);
+            form.setVisible(true);
+            int savestate = form.getSavestate();
+            if (savestate == 1) currentSave = "A";
+            else if (savestate == 2) currentSave = "B";
+            else if (savestate == 3) currentSave = "C";
+            else System.exit(0);
+    }
+
+    private void initStartingSaves() {
+        //adds all of the point generators to a new save file
+        SaveProfile save1 = new SaveProfile ("A", "Normal");
+        SaveProfile save2 = new SaveProfile ("B", "Normal");
+        SaveProfile save3 = new SaveProfile ("C", "Normal");
+        for (int x=0;x<generatorList.size();x++){
+            save1.addPGN(generatorList.get(x));
+            save2.addPGN(generatorList.get(x));
+            save3.addPGN(generatorList.get(x));
+        }
+        for (int x=0;x<upgradedList.size();x++){
+            save1.addPGU(upgradedList.get(x));
+            save2.addPGN(generatorList.get(x));
+            save3.addPGN(generatorList.get(x));
+        }
+        saves.put("A", save1);
+        saves.put("B", save2);
+        saves.put("C", save3);
+    }
+
     //custom variable declaration
     //this is because some elements are 
     //required to be static to be called from static methods
@@ -527,5 +585,6 @@ public class ISUgui extends javax.swing.JFrame {
     // End of variables declaration//GEN-END:variables
     */
 
+    
     
 }

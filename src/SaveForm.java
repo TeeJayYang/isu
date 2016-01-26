@@ -17,14 +17,11 @@ public class SaveForm extends javax.swing.JDialog {
     /**
      * Creates new form SaveForm
      */
-    HashMap<String, SaveProfile> s;
-    public SaveForm(java.awt.Frame parent, boolean modal,HashMap h) {
+    int savestate;
+    public SaveForm(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
-        s = h;
-//        for (SaveProfile sp: s){
-//            
-//        }
+
     }
 
     /**
@@ -36,18 +33,32 @@ public class SaveForm extends javax.swing.JDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jScrollPane1 = new javax.swing.JScrollPane();
-        lstsaves = new javax.swing.JList();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        txtinfo = new javax.swing.JTextArea();
+        btns1 = new javax.swing.JButton();
+        btns2 = new javax.swing.JButton();
+        btns3 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
-        jScrollPane1.setViewportView(lstsaves);
+        btns1.setText("Load Save A");
+        btns1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btns1ActionPerformed(evt);
+            }
+        });
 
-        txtinfo.setColumns(20);
-        txtinfo.setRows(5);
-        jScrollPane2.setViewportView(txtinfo);
+        btns2.setText("Load Save B");
+        btns2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btns2ActionPerformed(evt);
+            }
+        });
+
+        btns3.setText("Load Save C");
+        btns3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btns3ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -55,23 +66,45 @@ public class SaveForm extends javax.swing.JDialog {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 217, Short.MAX_VALUE)
-                .addContainerGap())
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btns1)
+                    .addComponent(btns2)
+                    .addComponent(btns3))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jScrollPane2)
-                    .addComponent(jScrollPane1))
+                .addComponent(btns1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btns2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btns3)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btns1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btns1ActionPerformed
+        savestate = 1;
+        this.dispose();
+    }//GEN-LAST:event_btns1ActionPerformed
+
+    private void btns2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btns2ActionPerformed
+        savestate = 2;
+        this.dispose();
+    }//GEN-LAST:event_btns2ActionPerformed
+
+    private void btns3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btns3ActionPerformed
+        savestate = 3;
+        this.dispose();
+    }//GEN-LAST:event_btns3ActionPerformed
+
+    public int getSavestate() {
+        return savestate;
+    }
 
     /**
      * @param args the command line arguments
@@ -103,7 +136,7 @@ public class SaveForm extends javax.swing.JDialog {
         /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                SaveForm dialog = new SaveForm(new javax.swing.JFrame(), true,null);
+                SaveForm dialog = new SaveForm(new javax.swing.JFrame(), true);
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override
                     public void windowClosing(java.awt.event.WindowEvent e) {
@@ -116,9 +149,8 @@ public class SaveForm extends javax.swing.JDialog {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JList lstsaves;
-    private javax.swing.JTextArea txtinfo;
+    private javax.swing.JButton btns1;
+    private javax.swing.JButton btns2;
+    private javax.swing.JButton btns3;
     // End of variables declaration//GEN-END:variables
 }
