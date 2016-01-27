@@ -1,7 +1,10 @@
 
-public class AutoIncrease {//class for the resources generation while idle
+public class AutoIncrease {
+    //class for the resources generation while idle
     private static int totalIncrease = 0;
+    //quantity of the normal generators
     private static int numG1=0, numG2=0, numG3=0;
+    //quantity of the upgraded generators
     private static int numGU1=0, numGU2=0, numGU3=0;
     public static int increase(String type, int n){
         if (type.equals("Normal")){//keeping track of all the unupgraded point generators
@@ -72,7 +75,8 @@ public class AutoIncrease {//class for the resources generation while idle
         }
         else return 0;
     }
-
+    //these methods are used for reading in saves and having to set all the 
+    //numbers of the point generaters manually from the text file
     public static void setNumG1(int numG1) {
         AutoIncrease.numG1 = numG1;
     }

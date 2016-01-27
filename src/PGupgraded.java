@@ -14,6 +14,8 @@ public class PGupgraded extends PointGenerator{
     }
     
     private void calcUpgradeCost(int bc){
+        //cost increase exponentially when there are more units
+        //to provide diminishing returns
         upgradeCost = bc * 100;
         upgradeCost *=  Math.pow(1.5, quantity);
     }

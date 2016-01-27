@@ -33,20 +33,14 @@ public class ISUgui extends javax.swing.JFrame {
         public ISUgui() {
             initComponents();
             initObjects();//create all the lists and timer
-            initStartingSaves();
-            setSave();
-            loadSaves();
+            initStartingSaves();//creates all the default saves
+            setSave();//makes the popup to select the save
+            loadSaves();//overwrites the default saves with saves read from file, if none exist then this doesnt execute
+            
             //initialize the GUI to its beginning state
             txtres.setText(Game.ToString());
             btnbuy.setEnabled(false);
-            try{
-                generatorList = (ArrayList<PGnormal>)saves.get(currentSave).getGeneratorList().clone();
-                upgradedList = (ArrayList<PGupgraded>)saves.get(currentSave).getUpgradedList().clone();
-            }
-            catch (Exception e){
-                System.out.println(e);
-            }
-            this.setTitle(currentSave);
+            this.setTitle(currentSave);//this sets the title to whatever save youre on(A, B, C)
             this.setResizable(false);
     }
     private void initObjects(){
@@ -57,9 +51,9 @@ public class ISUgui extends javax.swing.JFrame {
         normalmodel.addElement(generatorList.get(1).getName());
         generatorList.add(new PGnormal(1200, 100, "Mining Robot",2));
         normalmodel.addElement(generatorList.get(2).getName());
-        //sets list to the model
+        //sets list to the model initially -> so it shows all the names
         lstresources.setModel(normalmodel);
-        //list of upgraded point generators and list model
+        //list of upgraded point generators and updates a separate list model
         upgradedList.add(new PGupgraded(1, "Miner (Upgraded)",0));
         upgraded.addElement(upgradedList.get(0).getName());
         upgradedList.add(new PGupgraded(10, "Auto Drill (Upgraded)",1));
@@ -267,32 +261,33 @@ public class ISUgui extends javax.swing.JFrame {
         //of the manual increase
         Game.increaseResources(ManualIncrease.incrementAmount);
         txtres.setText(Game.ToString());
-        checkInterface();//making sure that the button update is instant
+        checkInterface();//making sure that the buy buttons update is instant
     }//GEN-LAST:event_btnIncreaseActionPerformed
 
     private void btndoubleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btndoubleActionPerformed
-        //this is simply a developer function for now
+        //this is simply a developer function for if you get tired to pressing +1 all the time
         ManualIncrease.doubleIncrement();//double the increment
         btnIncrease.setText("+" + ManualIncrease.incrementAmount);//update button text
     }//GEN-LAST:event_btndoubleActionPerformed
 
     private void lstresourcesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lstresourcesMouseClicked
-    
     }//GEN-LAST:event_lstresourcesMouseClicked
 
     private void lstresourcesMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lstresourcesMouseReleased
-    if (lstresources.getSelectedIndex() == -1) return;//this doesnt seem neccessary but actually prevents a random error
-    if (!chkupgraded.isSelected()){//this is the regular list (non upgraded)
-        int item = lstresources.getSelectedIndex();
-        int upgradeCost =  getUpgradeCost(generatorList.get(item),upgradedList.get(item));
-        txtinfo.setText(generatorList.get(item).toString(upgradeCost)); //brings up info of the item
-        checkInterface();//making sure that the button update is instant
-    }
-    else {
-        int item = lstresources.getSelectedIndex();
-        txtinfo.setText(upgradedList.get(item).toString());//brings up info of the upgraded item
-        checkInterface();//making sure that the button update is instant
-    }
+        if (lstresources.getSelectedIndex() == -1) return;//this doesnt seem neccessary but actually prevents a random error
+        if (!chkupgraded.isSelected()){//this is the regular list (non upgraded)
+            //makes sure that it is pulling the right information to txtinfo
+            int item = lstresources.getSelectedIndex();
+            int upgradeCost =  getUpgradeCost(generatorList.get(item),upgradedList.get(item));
+            txtinfo.setText(generatorList.get(item).toString(upgradeCost)); //brings up info of the item
+            checkInterface();//making sure that the button update is instant
+        }
+        else {
+            //this is for the upgraded list
+            int item = lstresources.getSelectedIndex();
+            txtinfo.setText(upgradedList.get(item).toString());//brings up info of the upgraded item
+            checkInterface();//making sure that the button update is instant
+        }
     }//GEN-LAST:event_lstresourcesMouseReleased
 
     private void btnbuyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnbuyActionPerformed
@@ -300,8 +295,8 @@ public class ISUgui extends javax.swing.JFrame {
         int cost = generatorList.get(item).getCost();
         Game.decreaseResources(cost);//"buy" the item, decrease resources
         txtres.setText(String.valueOf(Game.resources));//update resource text
-        generatorList.get(item).upQuantity();//increase appropriate generator by 1
-        int upgradeCost =  getUpgradeCost(generatorList.get(item),upgradedList.get(item));
+        generatorList.get(item).upQuantity();//increase appropriate generator type counter by 1
+        int upgradeCost =  getUpgradeCost(generatorList.get(item),upgradedList.get(item));//recalculating upgraded cost
         txtinfo.setText(generatorList.get(item).toString(upgradeCost));//update item info text
         AutoIncrease.increase("Normal",item+1);//update the automatic increase by the appropriate item
         checkInterface();//making sure that the button update is instant
@@ -314,15 +309,16 @@ public class ISUgui extends javax.swing.JFrame {
             int upgradeCost =  getUpgradeCost(generatorList.get(item),upgradedList.get(item));
             Game.decreaseResources(upgradeCost);//deduct the cost from resources
             txtres.setText(String.valueOf(Game.resources));//update resources counter
-            generatorList.get(item).downQuantity();//decreaes the number of normal units by 1
-            upgradedList.get(item).upQuantity();//increases the number of upgraded units of the same type by 1int upgradeCost =  getUpgradeCost(generatorList.get(item),upgradedList.get(item));
-            upgradeCost =  getUpgradeCost(generatorList.get(item),upgradedList.get(item));
+            generatorList.get(item).downQuantity();//decreases the number of normal units by 1
+            upgradedList.get(item).upQuantity();//increases the number of upgraded units of the same type by 1
+            upgradeCost =  getUpgradeCost(generatorList.get(item),upgradedList.get(item));//recalculate the upgrade cost
             txtinfo.setText(generatorList.get(item).toString(upgradeCost));//update info text
             AutoIncrease.increase("Upgraded", item+1);//update the auto increase to match the units
             AutoIncrease.decrease("Normal",item+1);//removing the corresponding normal item
             checkInterface();//making sure that the button update is instant
         }
         else{
+            //if there is no normal unit to upgrade then it says so
             JOptionPane.showMessageDialog(rootPane, "You need at least one unit to upgrade!");
         }
     }//GEN-LAST:event_btnupgradeActionPerformed
@@ -335,6 +331,7 @@ public class ISUgui extends javax.swing.JFrame {
     private void chkupgradedMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_chkupgradedMouseClicked
         //for some reason sometimes if the checkbox is clicked, it doesnt change the check mark
         //we check for the actual selection boolean to make the list change more consistent
+        //this changes the list model depending on if you want the upgraded list or not
         if (chkupgraded.isSelected()){
             lstresources.setModel(upgraded);
         }
@@ -344,6 +341,8 @@ public class ISUgui extends javax.swing.JFrame {
     }//GEN-LAST:event_chkupgradedMouseClicked
 
     private void btnsaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnsaveActionPerformed
+        //this part sorts everything into arrays to be sent
+        //into the save method of the save file
         PGnormal[] pgn = new PGnormal[generatorList.size()];
         PGupgraded[] pgu = new PGupgraded[upgradedList.size()];
         for (int x=0;x<generatorList.size();x++){
@@ -353,28 +352,35 @@ public class ISUgui extends javax.swing.JFrame {
             pgu[x] = upgradedList.get(x);
         }
         FileWriter fw;
-        
+        //depending on the save file, have to manually choose the order of saving
+        //to make sure it gets read in the same order as well
         try {
             fw = new FileWriter ("saves.txt");
             PrintWriter p = new PrintWriter(fw);
-            Iterator it = saves.entrySet().iterator();
-            while (it.hasNext()){
-                System.out.println("has next");
-                Map.Entry pair = (Map.Entry)it.next();
-                SaveProfile save = saves.get(pair.getKey());
-                
-                System.out.println("Attempting to save" + save);
-                save.save(pgn, pgu, p);
-                if (pair.getKey()==currentSave){
-                    p.println(Game.resources);
-                }
-                else{
-                    if (pair.getKey()=="A")p.println (allGameResources[0]);
-                    if (pair.getKey()=="B")p.println (allGameResources[1]);
-                    if (pair.getKey()=="C")p.println (allGameResources[2]);
-                }
+            if (currentSave=="A"){
+                saves.get("A").save(pgn, pgu, p);
+                p.println(Game.resources);
+                saves.get("B").save(p);
+                p.println(allGameResources[1]);
+                saves.get("C").save(p);
+                p.println(allGameResources[2]);
             }
-            
+            else if (currentSave=="B"){
+                saves.get("A").save(p);
+                p.println(allGameResources[0]);
+                saves.get("B").save(pgn, pgu, p);
+                p.println(Game.resources);
+                saves.get("C").save(p);
+                p.println(allGameResources[2]);
+            }
+            else if (currentSave=="C"){
+                saves.get("A").save(p);
+                p.println(allGameResources[0]);
+                saves.get("B").save(p);
+                p.println(allGameResources[1]);
+                saves.get("C").save(pgn, pgu, p);
+                p.println(Game.resources);
+            }
             p.close();
         }
         catch(IOException ex){
@@ -409,10 +415,9 @@ public class ISUgui extends javax.swing.JFrame {
 //        depending on if your resources are enough to afford
         int item = lstresources.getSelectedIndex();
 //        it also works as a resource checker
-//        if you cannot afford to buy something, the button is disabled
+//        if you cannot afford to buy something, these buttons are disabled
 //        this way you wont be able to run the buy methods to buy things when 
 //        youre not supposed to 
-        
         if (lstresources.isSelectionEmpty()){
             btnbuy.setEnabled(false);
             btnupgrade.setEnabled(false);
@@ -432,6 +437,8 @@ public class ISUgui extends javax.swing.JFrame {
         }
     }
     public static int getUpgradeCost (PGnormal a, PGupgraded b){
+        //this method just finds the upgrade cost of the upgraded counterpart of the point generator
+        //done since upgraded and normal generators are separate objects
         int upgradeCost = a.getBaseCost();
         upgradeCost = b.getUpgradeCost(upgradeCost);//finding the upgrade cost
         return upgradeCost;
@@ -478,11 +485,25 @@ public class ISUgui extends javax.swing.JFrame {
         try{
             FileReader fr = new FileReader ("saves.txt");
             BufferedReader br = new BufferedReader(fr);
+            boolean isEmpty = false;
+            //for loop runs 3 time for 3 save files
             for (int x=0;x<3;x++){
+                //read name from the first line
                 String name=br.readLine();
-                if (name==null)break;
+                System.out.println(name);
+                //if the first line is empty, break out of the loop
+                //and return immediately
+                if (name==null){
+                    isEmpty = true;
+                    break;
+                }
+                //read all of the values of each line and put them into the 
+                //corresponding values of the object
                 String type=br.readLine();
                 SaveProfile s = new SaveProfile(name, type);
+                //for loop runs 3 times for 3 normal point generators
+                //reads all of the values and instantiates a temp object
+                //then adds it to a save file
                 for (int y = 0; y<3; y++){
                     String n = br.readLine();
                     int t = Integer.parseInt(br.readLine());
@@ -490,27 +511,49 @@ public class ISUgui extends javax.swing.JFrame {
                     int q = Integer.parseInt(br.readLine());
                     double c = Double.parseDouble(br.readLine());
                     PGnormal pgn = new PGnormal(c, r, n, t);
+                    System.out.println(pgn);
                     pgn.setQuantity(q);
                     s.addPGN(pgn);
                 }
-                
+                //for loop runs 3 times for 3 upgraded point generators
+                //reads all of the values and instantiates a temp object
+                //then adds it to a save file
                 for (int y = 0; y<3; y++){
                     String n = br.readLine();
                     int t = Integer.parseInt(br.readLine());
                     int r = Integer.parseInt(br.readLine());
                     int q = Integer.parseInt(br.readLine());
                     PGupgraded pgu = new PGupgraded(r, n, t);
+                    System.out.println(pgu);
                     pgu.setQuantity(q);
                     s.addPGU(pgu);
                 }
                 saves.put(s.getName(), s);
                 int r = Integer.parseInt(br.readLine());
+                //reads all of the game resources
                 allGameResources[x] = r;
+                //since the resources are different and not tied to a name or object
+                //have to maunually check which save file the game resources is tied to
                 if (x == 0 && "A".equals(currentSave))Game.increaseResources(allGameResources[x]);
                 else if (x == 1 && "B".equals(currentSave)) Game.increaseResources(allGameResources[x]);
                 else if (x == 2 && "C".equals(currentSave)) Game.increaseResources(allGameResources[x]);
             }
-            
+            if(isEmpty)return;
+            try{//clones the save file to the actual game
+                generatorList = (ArrayList<PGnormal>)saves.get(currentSave).getGeneratorList().clone();
+                upgradedList = (ArrayList<PGupgraded>)saves.get(currentSave).getUpgradedList().clone();
+                //sets up all the increases according to the quantity of each generator
+                AutoIncrease.setNumG1(generatorList.get(0).getQuantity());
+                AutoIncrease.setNumG2(generatorList.get(1).getQuantity());
+                AutoIncrease.setNumG3(generatorList.get(2).getQuantity());
+                AutoIncrease.setNumGU1(upgradedList.get(0).getQuantity());
+                AutoIncrease.setNumGU2(upgradedList.get(1).getQuantity());
+                AutoIncrease.setNumGU3(upgradedList.get(2).getQuantity());
+            }
+            catch (Exception e){
+                System.out.println(e);
+            }
+
             br.close();
         }
         catch(Exception e){
@@ -518,17 +561,19 @@ public class ISUgui extends javax.swing.JFrame {
         }
     }
     private void setSave() {
-         SaveForm form = new SaveForm (this, true);
-            form.setVisible(true);
-            int savestate = form.getSavestate();
-            if (savestate == 1) currentSave = "A";
-            else if (savestate == 2) currentSave = "B";
-            else if (savestate == 3) currentSave = "C";
-            else System.exit(0);
+        //opens up a form of 3 buttons just to choose which save to use
+        SaveForm form = new SaveForm (this, true);
+        form.setVisible(true);
+        int savestate = form.getSavestate();
+        if (savestate == 1) currentSave = "A";
+        else if (savestate == 2) currentSave = "B";
+        else if (savestate == 3) currentSave = "C";
+        else System.exit(0);
     }
 
     private void initStartingSaves() {
         //adds all of the point generators to a new save file
+        //for when there is no save file provided
         SaveProfile save1 = new SaveProfile ("A", "Normal");
         SaveProfile save2 = new SaveProfile ("B", "Normal");
         SaveProfile save3 = new SaveProfile ("C", "Normal");
@@ -539,8 +584,8 @@ public class ISUgui extends javax.swing.JFrame {
         }
         for (int x=0;x<upgradedList.size();x++){
             save1.addPGU(upgradedList.get(x));
-            save2.addPGN(generatorList.get(x));
-            save3.addPGN(generatorList.get(x));
+            save2.addPGU(upgradedList.get(x));
+            save3.addPGU(upgradedList.get(x));
         }
         saves.put("A", save1);
         saves.put("B", save2);

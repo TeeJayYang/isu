@@ -5,8 +5,11 @@ import java.util.TimerTask;
 public class Updater extends TimerTask {
     int rate[] = new int[3];
     public Updater (){
+    
     }
+    
     public void setRate(int num, int r){
+        //manually set the rate in the main gui for flexability
         for (int x = 0; x < rate.length; x++){
             if (x==num){
                 rate[x]=r;

@@ -2,6 +2,7 @@
 public class Game {
     //pretty self explanatory, this is the main resources of the game
     //methods to increase/decrease resources, print resources, and return int resources
+    //static class because its variables need to accessed throughout the whole file
     static int resources = 0;
     public Game(){
     }

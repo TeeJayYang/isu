@@ -8,6 +8,8 @@ public class PGnormal extends PointGenerator{
     public final int getCost(){
         //base cost remains the same
         //but the actual cost increse per unit owned
+        //cost increase exponentially when there are more units
+        //to provide diminishing returns
         int finalcost = (int)(basecost * Math.pow(1.5, quantity));
         return finalcost;
     }

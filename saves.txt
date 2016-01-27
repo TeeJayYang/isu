@@ -1,0 +1,90 @@
+A
+Normal
+Miner
+0
+1
+0
+10.0
+Auto Drill
+1
+10
+0
+300.0
+Mining Robot
+2
+100
+0
+1200.0
+Miner (Upgraded)
+0
+100
+0
+Auto Drill (Upgraded)
+1
+1000
+0
+Mining Robot (Upgraded)
+2
+10000
+0
+0
+B
+Normal
+Miner
+0
+1
+0
+10.0
+Auto Drill
+1
+10
+0
+300.0
+Mining Robot
+2
+100
+0
+1200.0
+Miner (Upgraded)
+0
+100
+0
+Auto Drill (Upgraded)
+1
+1000
+0
+Mining Robot (Upgraded)
+2
+10000
+0
+0
+C
+Normal
+Miner
+0
+1
+0
+10.0
+Auto Drill
+1
+10
+0
+300.0
+Mining Robot
+2
+100
+0
+1200.0
+Miner (Upgraded)
+0
+100
+0
+Auto Drill (Upgraded)
+1
+1000
+0
+Mining Robot (Upgraded)
+2
+10000
+0
+0

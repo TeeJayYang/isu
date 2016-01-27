@@ -21,7 +21,7 @@ public class SaveForm extends javax.swing.JDialog {
     public SaveForm(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
-
+        this.setResizable(false);
     }
 
     /**
@@ -38,6 +38,7 @@ public class SaveForm extends javax.swing.JDialog {
         btns3 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setAlwaysOnTop(true);
 
         btns1.setText("Load Save A");
         btns1.addActionListener(new java.awt.event.ActionListener() {
@@ -86,7 +87,8 @@ public class SaveForm extends javax.swing.JDialog {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
+    //each method sets the save state to its corresponding button so the main 
+    //gui can tell which save is needed
     private void btns1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btns1ActionPerformed
         savestate = 1;
         this.dispose();
