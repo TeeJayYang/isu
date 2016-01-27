@@ -26,12 +26,11 @@ public class PGupgraded extends PointGenerator{
         str += "Type: Upgraded\n";
         return str;
     } 
-
     @Override
     public double calcRatetoPrice() {
         double cost = upgradeCost;
         double ratio = rate/cost;
-        ratio = (double)Math.round(ratio * 100d) / 100d;
+        ratio = (double)Math.round(ratio * 10000d) / 10000d;
         return ratio;
     }
 }

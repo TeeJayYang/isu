@@ -2,8 +2,8 @@
 
 
 
-//gotta read all the info into the actual game stats, setting up the auto upgraded correctly
-//more comments omg
+//this game is about clicking to get resources to buy point generators to get
+//more resources
 
 
 
@@ -14,8 +14,6 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
 import java.util.Timer;
 import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
@@ -36,6 +34,11 @@ public class ISUgui extends javax.swing.JFrame {
             initStartingSaves();//creates all the default saves
             setSave();//makes the popup to select the save
             loadSaves();//overwrites the default saves with saves read from file, if none exist then this doesnt execute
+            
+            //setting up all the upgrade costs of the upgraded units intially
+            for (int x= 0;x<generatorList.size();x++){
+                getUpgradeCost(generatorList.get(x),upgradedList.get(x));
+            }
             
             //initialize the GUI to its beginning state
             txtres.setText(Game.ToString());
@@ -60,10 +63,7 @@ public class ISUgui extends javax.swing.JFrame {
         upgraded.addElement(upgradedList.get(1).getName());
         upgradedList.add(new PGupgraded(100, "Mining Robot (Upgraded)",2));
         upgraded.addElement(upgradedList.get(2).getName());
-        //setting up all the upgrade costs of the upgraded units intially
-        for (int x= 0;x<generatorList.size();x++){
-            getUpgradeCost(generatorList.get(x),upgradedList.get(x));
-        }//for scheduled point increments
+        //for scheduled point increments
         t = new Timer();
         //the increment itself
         u = new Updater();
@@ -523,7 +523,7 @@ public class ISUgui extends javax.swing.JFrame {
                     int t = Integer.parseInt(br.readLine());
                     int r = Integer.parseInt(br.readLine());
                     int q = Integer.parseInt(br.readLine());
-                    PGupgraded pgu = new PGupgraded(r, n, t);
+                    PGupgraded pgu = new PGupgraded(r/100, n, t);
                     System.out.println(pgu);
                     pgu.setQuantity(q);
                     s.addPGU(pgu);

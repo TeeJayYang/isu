@@ -32,7 +32,7 @@ public class PGnormal extends PointGenerator{
     public double calcRatetoPrice() {
         double cost = getCost();
         double ratio = rate/cost;
-        ratio = (double)Math.round(ratio * 100d) / 100d;
+        ratio = (double)Math.round(ratio * 10000d) / 10000d;
         return ratio;
     }
     public String toSaveString(){
